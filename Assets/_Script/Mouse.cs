@@ -1,0 +1,95 @@
+using Cinemachine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class Mouse : MonoBehaviour
+{
+
+    [Header("Mouse Settings")]
+    public float mouseSensitivity = 100f;
+    public Transform orientation;
+    public Transform cameraHolder; // Assign the camera or its pivot here (used for vertical look)
+    public CinemachineVirtualCamera MainCamera, ADSCamera;
+
+    private float rotationY; // Yaw (left/right)
+    private float rotationX; // Pitch (up/down)
+
+    [Header("Shooting")]
+    public GameObject Projectile;
+    public Transform firePoint;
+    public float projectileSpeed = 20f;
+    public float fireCooldown = 0.2f;
+    private bool canFire = true;
+
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    void Update()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+        rotationY += mouseX;
+        rotationX -= mouseY;
+        rotationX = Mathf.Clamp(rotationX, -80f, 80f); // Clamp vertical look
+
+        transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
+        if (orientation != null)
+        {
+            orientation.rotation = Quaternion.Euler(0f, rotationY, 0f); // For movement direction
+        }
+
+        if (cameraHolder != null)
+        {
+            cameraHolder.localRotation = Quaternion.Euler(rotationX, 0f, 0f); // Rotate camera up/down
+        }
+    }
+
+    public void AimDownSights(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            ADSCamera.Priority = 1;
+            MainCamera.Priority = 0;
+        }
+        else if (context.canceled)
+        {
+            ADSCamera.Priority = 0;
+            MainCamera.Priority = 1;
+        }
+    }
+
+    public void Fire(InputAction.CallbackContext context)
+    {
+        if (context.started && canFire)
+        {
+            StartCoroutine(FireWithCooldown());
+        }
+    }
+
+    private IEnumerator FireWithCooldown()
+    {
+        canFire = false;
+
+        if (Projectile != null && firePoint != null)
+        {
+            Quaternion projectileRotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 90);
+            GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
+            Cinemachine.CinemachineImpulseSource source = spawnedProjectile.GetComponent<Cinemachine.CinemachineImpulseSource>();
+            source.GenerateImpulse(Camera.main.transform.forward);
+            Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = firePoint.forward * projectileSpeed;
+            }
+        }
+
+        yield return new WaitForSeconds(fireCooldown);
+        canFire = true;
+    }
+}
