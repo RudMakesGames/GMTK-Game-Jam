@@ -1,10 +1,11 @@
 using Cinemachine;
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Mouse : MonoBehaviour
+public class Mouse : NetworkBehaviour
 {
 
     [Header("Mouse Settings")]

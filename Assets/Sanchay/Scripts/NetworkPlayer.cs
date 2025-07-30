@@ -14,7 +14,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] 
         Rigidbody rb;
     [SerializeField]
-        CinemachineFreeLook cineCam;
+        CinemachineVirtualCamera cineCamMain, cineCamAds;
     [SerializeField]
         NetworkRigidbody3D NRb;
     [SerializeField]
@@ -58,10 +58,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Debug.Log("You have spawnned");
             transform.name = "YOU";
 
-            cineCam = FindObjectOfType<CinemachineFreeLook>();
+            cineCamMain = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
+            cineCamAds = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
 
-            cineCam.m_Follow = transform;
-            cineCam.m_LookAt = transform;
+            cineCamMain.m_Follow = transform.Find("Follow Target").transform;
+            cineCamAds.m_Follow = transform.Find("Follow Target").transform;
+            //cineCam.m_LookAt = transform;
             mainCam = FindObjectOfType<Camera>();
         }
         else
