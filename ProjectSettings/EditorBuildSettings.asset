@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Sanchay/Scenes/Test1.unity
+    guid: 7867f89675ab45d40831f1a5d792633f
   m_configObjects: {}
