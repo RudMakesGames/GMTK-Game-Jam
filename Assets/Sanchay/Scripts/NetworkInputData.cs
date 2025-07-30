@@ -1,0 +1,9 @@
+﻿using Fusion;
+using UnityEngine;
+
+public struct NetworkInputData : INetworkInput
+{
+    public Vector2 moveInput;
+    public NetworkBool isJumping;
+    public NetworkBool canAttack;
+}
