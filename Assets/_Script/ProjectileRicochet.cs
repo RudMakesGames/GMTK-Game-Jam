@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class ProjectileRicochet : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator DestroyAfterDelay()
+    IEnumerator DestroyAfterDelay()
     {
         yield return new WaitForSeconds(destroyDelay);
         Destroy(gameObject);

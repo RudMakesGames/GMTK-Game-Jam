@@ -14,8 +14,8 @@ public class Mouse : NetworkBehaviour
     public Transform cameraHolder; // Assign the camera or its pivot here (used for vertical look)
     public CinemachineVirtualCamera MainCamera, ADSCamera;
 
-    private float rotationY; // Yaw (left/right)
-    private float rotationX; // Pitch (up/down)
+    public float rotationY; // Yaw (left/right)
+    public float rotationX; // Pitch (up/down)
 
     [Header("Shooting")]
     public GameObject Projectile;
@@ -23,6 +23,8 @@ public class Mouse : NetworkBehaviour
     public float projectileSpeed = 20f;
     public float fireCooldown = 0.2f;
     private bool canFire = true;
+
+    public float mouseX, mouseY;
 
     void Start()
     {
@@ -32,14 +34,16 @@ public class Mouse : NetworkBehaviour
 
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        //if (!Object.HasInputAuthority) return;
+
+        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         rotationY += mouseX;
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -80f, 80f); // Clamp vertical look
 
-        transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
+        /*transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
         if (orientation != null)
         {
             orientation.rotation = Quaternion.Euler(0f, rotationY, 0f); // For movement direction
@@ -48,11 +52,68 @@ public class Mouse : NetworkBehaviour
         if (cameraHolder != null)
         {
             cameraHolder.localRotation = Quaternion.Euler(rotationX, 0f, 0f); // Rotate camera up/down
-        }
+        }*/
     }
+
+    /*public NetworkInputData GetNetworkInput()
+    {
+        NetworkInputData networkInputData = new NetworkInputData();
+
+        //movement
+        networkInputData.moveInput = moveInputVector;
+        networkInputData.mouseInput.x = mouseInputScript.rotationY;
+        networkInputData.mouseInput.y = mouseInputScript.rotationX;
+
+        //jump
+        *//*if (isJumping)
+        {
+            networkInputData.isJumping = isJumping;
+        }*//*
+
+        networkInputData.isJumping = isJumping;
+        networkInputData.camRotY = camRotTemp;
+
+
+
+        return networkInputData;
+    }
+*/
+    /*public override void Spawned()
+    {
+        if(Object.HasInputAuthority)
+        {
+            MainCamera = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
+            ADSCamera = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
+        }
+    }*/
+
+    public void assignReferences()
+    {
+        MainCamera = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
+        ADSCamera = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
+    }
+
+    /*public override void FixedUpdateNetwork()
+    {
+        if (Object.HasInputAuthority)
+        {
+            *//*transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
+            if (orientation != null)
+            {
+                orientation.rotation = Quaternion.Euler(0f, rotationY, 0f); // For movement direction
+            }
+
+            if (cameraHolder != null)
+            {
+                cameraHolder.localRotation = Quaternion.Euler(rotationX, 0f, 0f); // Rotate camera up/down
+            }*//*
+        }
+    }*/
 
     public void AimDownSights(InputAction.CallbackContext context)
     {
+        //if (!Object.HasInputAuthority) return;
+
         if (context.started)
         {
             ADSCamera.Priority = 1;
@@ -67,6 +128,7 @@ public class Mouse : NetworkBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
+        //if (!Object.HasInputAuthority) return;
         if (context.started && canFire)
         {
             StartCoroutine(FireWithCooldown());
@@ -77,10 +139,12 @@ public class Mouse : NetworkBehaviour
     {
         canFire = false;
 
-        if (Projectile != null && firePoint != null)
+        if (Projectile != null && firePoint != null && Object.HasStateAuthority)
         {
             Quaternion projectileRotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 90);
-            GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
+            //GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
+            NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
+
             Cinemachine.CinemachineImpulseSource source = spawnedProjectile.GetComponent<Cinemachine.CinemachineImpulseSource>();
             source.GenerateImpulse(Camera.main.transform.forward);
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
