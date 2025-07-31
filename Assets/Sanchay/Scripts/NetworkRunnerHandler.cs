@@ -13,6 +13,9 @@ public class NetworkRunnerHandler : MonoBehaviour
     [SerializeField]
     NetworkRunner networkRunnerPrefab;
 
+    public
+    Transform spawnPoint;
+
     NetworkRunner networkRunner;
 
     private void Awake()

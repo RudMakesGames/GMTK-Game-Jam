@@ -8,6 +8,12 @@ using System;
 public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] NetworkPlayer networkPlayerPrefab;
+    NetworkRunnerHandler networkRunnerHandlerScript;
+
+    private void Awake()
+    {
+        networkRunnerHandlerScript = FindObjectOfType<NetworkRunnerHandler>();
+    }
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -60,7 +66,8 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         {
             Debug.Log("This is host");
-            runner.Spawn(networkPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity, player);
+            Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
+            runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
         }
         else
         {
