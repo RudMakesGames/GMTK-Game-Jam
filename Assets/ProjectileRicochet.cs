@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileRicochet : NetworkBehaviour
+public class ProjectileRicochet : MonoBehaviour
 {
     public float destroyDelay = 5f; 
     private bool hasCollided = false;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Mouse : MonoBehaviour
+public class Mouse : NetworkBehaviour
 {
 
     [Header("Mouse Settings")]
@@ -139,10 +139,12 @@ public class Mouse : MonoBehaviour
     {
         canFire = false;
 
-        if (Projectile != null && firePoint != null)
+        if (Projectile != null && firePoint != null && Object.HasStateAuthority)
         {
             Quaternion projectileRotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 90);
-            GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
+            //GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
+            NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
+
             Cinemachine.CinemachineImpulseSource source = spawnedProjectile.GetComponent<Cinemachine.CinemachineImpulseSource>();
             source.GenerateImpulse(Camera.main.transform.forward);
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
