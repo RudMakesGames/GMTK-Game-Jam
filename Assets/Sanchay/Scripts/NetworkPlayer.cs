@@ -13,36 +13,33 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public static NetworkPlayer Local { get; set; }
 
     [Header("References Auto")]
-    [SerializeField] 
-        Rigidbody rb;
-    [SerializeField]
-        CinemachineVirtualCamera cineCamMain, cineCamAds;
-    [SerializeField]
-        NetworkRigidbody3D NRb;
-    [SerializeField]
-        CapsuleCollider playerCollider;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] CinemachineVirtualCamera cineCamMain, cineCamAds,cineCamParachute;
+    [SerializeField] NetworkRigidbody3D NRb;
+    [SerializeField] CapsuleCollider playerCollider;
     [SerializeField] Transform mainCam;
     [SerializeField] TextMeshProUGUI referencesCheckText;
     [SerializeField] CinemachineBrain cineBrain;
 
     [Header("References Manual")]
-    [SerializeField]
-        LayerMask groundLayer;
-    [SerializeField]
-        float maxSpeed;
+    [SerializeField] LayerMask groundLayer;
+    [SerializeField] float maxSpeed;
+
+    [Header("Parachute Settings")]
+    public GameObject parachuteVisual;
+    public float parachuteFallSpeed = 2f;
+    public float deployHeight = 15f;
+    private bool isParachuting = false;
+    private bool parachuteRequested = false;
 
     #region Input
     Vector2 moveInputVector = Vector2.zero;
-    bool isJumping = false; bool isGrounded = false;
-    bool canAttack = true;
+    bool isJumping = false;
+    bool isGrounded = false;
     Mouse mouseInputScript;
     float smoothVel;
     float camRotTemp;
-
-    //float rotationY, rotationX;
     #endregion
-
-
 
     private void Awake()
     {
@@ -52,97 +49,79 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         mouseInputScript = GetComponent<Mouse>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public override void Spawned()
     {
-        //Runner.SetIsSimulated(Object, Object.HasStateAuthority);
-        if(Object.HasInputAuthority)
+        if (Object.HasInputAuthority)
         {
             Local = this;
-            Debug.Log("You have spawnned");
+            Debug.Log("You have spawned");
 
             transform.name = $"P_{Object.Id}";
 
-            //transform.name = "YOU";
-
             cineCamMain = GameObject.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
             cineCamAds = GameObject.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
-
+            cineCamParachute = GameObject.Find("Parachute Follow Camera").GetComponent<CinemachineVirtualCamera>();
             cineBrain = FindObjectOfType<CinemachineBrain>();
-
-            cineCamMain.m_Follow = transform.Find("Follow Target").transform;
-            cineCamAds.m_Follow = transform.Find("Follow Target").transform;
-            //cineCam.m_LookAt = transform;
-            mainCam = GameObject.Find("Main Camera").GetComponent<Transform>();
-
+            mainCam = GameObject.Find("Main Camera").transform;
+            
+            cineCamMain.m_Follow = transform.Find("Follow Target");
+            cineCamAds.m_Follow = transform.Find("Follow Target");
+            cineCamParachute.m_Follow = transform.Find("Follow Target");
             referencesCheckText = FindObjectOfType<TextMeshProUGUI>();
             referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;
+
             mouseInputScript.assignReferences();
         }
         else
         {
-            Debug.Log("This is the client spawnned");
             transform.name = $"P_{Object.Id}";
         }
-
-        //transform.name = $"P_{Object.Id}";
-
-        //referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;
-
-
+        if (parachuteVisual == null)
+        {
+            parachuteVisual = GameObject.Find("ParachuteVisual");
+        }
+        parachuteVisual?.SetActive(false);
     }
 
     public NetworkInputData GetNetworkInput()
     {
-        NetworkInputData networkInputData = new NetworkInputData();
+        NetworkInputData input = new NetworkInputData();
+        input.moveInput = moveInputVector;
+        input.mouseInput.x = mouseInputScript.rotationY;
+        input.mouseInput.y = mouseInputScript.rotationX;
+        input.isJumping = isJumping;
+        input.camRotY = camRotTemp;
+        input.parachuteRequested = parachuteRequested;
 
-        //movement
-        networkInputData.moveInput = moveInputVector;
-        networkInputData.mouseInput.x = mouseInputScript.rotationY;
-        networkInputData.mouseInput.y = mouseInputScript.rotationX;
-
-        //jump
-        /*if (isJumping)
-        {
-            networkInputData.isJumping = isJumping;
-        }*/
-
-        networkInputData.isJumping = isJumping;
-        networkInputData.camRotY = camRotTemp;
-
-        /*if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            isJumping = true;
-            networkInputData.isJumping = true;
-        }*/
-
-        return networkInputData;
+        parachuteRequested = false; // Reset after send
+        return input;
     }
 
-    // Update is called once per frame
     void Update()
     {
         moveInputVector.x = Input.GetAxis("Horizontal");
         moveInputVector.y = Input.GetAxis("Vertical");
 
-        if(Object.HasInputAuthority)
-        camRotTemp = mainCam.eulerAngles.y;
-
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Object.HasInputAuthority)
         {
-            isJumping = true;
-            Debug.Log("jumping");
+            camRotTemp = mainCam.eulerAngles.y;
+
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                isJumping = true;
+            }
+
+            // Manual parachute request
+            if (Input.GetKeyDown(KeyCode.E) && !isGrounded)
+            {
+                parachuteRequested = true;
+            }
         }
     }
 
     public override void Render()
     {
-        if(Object.HasInputAuthority)
+        if (Object.HasInputAuthority)
         {
             cineBrain.ManualUpdate();
             cineCamMain.UpdateCameraState(Vector3.up, Runner.LocalAlpha);
@@ -155,65 +134,85 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             isGrounded = GroundCheck();
 
+            // Auto deploy parachute from height
             if (!isGrounded)
             {
-                rb.AddForce(Vector3.down * 8f);
+                if (!isParachuting && transform.position.y > deployHeight && rb.velocity.y < -0.1f)
+                {
+                    isParachuting = true;
+                    parachuteVisual?.SetActive(true);
+                    cineCamParachute.Priority = 2;
+                    cineCamMain.Priority = 0;
+                    cineCamAds.Priority = 0;
+                }
+            }
+            else if (isParachuting)
+            {
+                isParachuting = false;
+                 parachuteVisual?.SetActive(false);
+                cineCamMain.Priority = 2;
+                cineCamParachute.Priority = 0;
+                cineCamAds.Priority = 1;
             }
 
+            // Clamp below world
             if (transform.position.y < -20f)
             {
                 NRb.Teleport(Vector3.zero, Quaternion.identity);
             }
         }
 
-        if (GetInput(out NetworkInputData networkInputData))
+        if (GetInput(out NetworkInputData input))
         {
-            float inputMag = networkInputData.moveInput.magnitude;
-            Vector3 moveDirn = new Vector3(networkInputData.moveInput.x, 0, networkInputData.moveInput.y).normalized;
+            float inputMag = input.moveInput.magnitude;
+            Vector3 moveDir = new Vector3(input.moveInput.x, 0, input.moveInput.y).normalized;
 
-
-            transform.rotation = Quaternion.Euler(0f, networkInputData.mouseInput.x, 0f); // Rotate player body
-
+            transform.rotation = Quaternion.Euler(0f, input.mouseInput.x, 0f);
             if (mouseInputScript.orientation != null)
-            {
-                mouseInputScript.orientation.rotation = Quaternion.Euler(0f, networkInputData.mouseInput.x, 0f);
-            }
-
+                mouseInputScript.orientation.rotation = Quaternion.Euler(0f, input.mouseInput.x, 0f);
             if (mouseInputScript.cameraHolder != null)
-            {
-                mouseInputScript.cameraHolder.localRotation = Quaternion.Euler(networkInputData.mouseInput.y, 0f, 0f); // Rotate camera up/down
-            }
-
+                mouseInputScript.cameraHolder.localRotation = Quaternion.Euler(input.mouseInput.y, 0f, 0f);
 
             if (inputMag > 0.2f)
             {
-                float desiredAngle = Mathf.Atan2(moveDirn.x, moveDirn.z) * Mathf.Rad2Deg + networkInputData.camRotY;
-                //float currentAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, desiredAngle, ref smoothVel, 0.2f);
-
-
-                Vector3 moveDirn2 = Quaternion.Euler(0f, desiredAngle, 0f) * Vector3.forward.normalized;
-                rb.velocity = new Vector3(moveDirn2.x * maxSpeed, rb.velocity.y, moveDirn2.z * maxSpeed);
+                float desiredAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg + input.camRotY;
+                Vector3 rotatedDir = Quaternion.Euler(0f, desiredAngle, 0f) * Vector3.forward.normalized;
+                rb.velocity = new Vector3(rotatedDir.x * maxSpeed, rb.velocity.y, rotatedDir.z * maxSpeed);
             }
 
-            if (networkInputData.isJumping)
+            // Manual parachute deploy
+            if (input.parachuteRequested && !isGrounded && !isParachuting)
+            {
+                isParachuting = true;
+                 parachuteVisual?.SetActive(true);
+                cineCamParachute.Priority = 2;
+                cineCamMain.Priority = 0;
+                cineCamAds.Priority = 0;
+            }
+
+            // Apply parachute fall limit
+            if (isParachuting && rb.velocity.y < -parachuteFallSpeed)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, -parachuteFallSpeed, rb.velocity.z);
+            }
+
+            // Jump
+            if (input.isJumping)
             {
                 rb.AddForce(Vector3.up * 15f, ForceMode.Impulse);
-                Debug.Log("jumping");
                 isJumping = false;
-                networkInputData.isJumping = false;
             }
-
         }
 
-        if(Object.HasInputAuthority)
+        if (Object.HasInputAuthority)
         {
-            referencesCheckText.text = mouseInputScript.rotationY.ToString() + " and " + mouseInputScript.rotationX.ToString()+"\n"+"is Grounded:"+isGrounded+"\n"+"isJumping:"+isJumping;
+            referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
     }
 
     public void PlayerLeft(PlayerRef player)
     {
-        if(Object.InputAuthority == player)
+        if (Object.InputAuthority == player)
         {
             Runner.Despawn(Object);
         }
@@ -221,13 +220,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     bool GroundCheck()
     {
-        //Ray groundCheckRay;
-        if (Physics.Raycast(transform.position + transform.up, Vector3.down, (playerCollider.height / 2) + 1.5f, groundLayer))
-        {
-            //Debug.Log("hit ground");
-            //Debug.DrawRay(transform.position + transform.up, Vector3.down * ((playerCollider.height / 2) + 1.8f), Color.red);
-            return true;
-        }
-        return false;
+        return Physics.Raycast(transform.position + transform.up, Vector3.down, (playerCollider.height / 2) + 1.5f, groundLayer);
     }
 }

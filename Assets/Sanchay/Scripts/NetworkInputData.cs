@@ -8,4 +8,5 @@ public struct NetworkInputData : INetworkInput
     public NetworkBool canAttack;
     public Vector2 mouseInput;
     public float camRotY;
+    public NetworkBool parachuteRequested;
 }
