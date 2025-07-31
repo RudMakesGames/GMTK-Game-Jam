@@ -364,12 +364,12 @@ MonoBehaviour:
   NRb: {fileID: 0}
   playerCollider: {fileID: 0}
   mainCam: {fileID: 0}
+  referencesCheckText: {fileID: 0}
+  cineBrain: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  maxSpeed: 7
-  isJumping: 0
-  isGrounded: 0
+  maxSpeed: 7.5
 --- !u!114 &2742987548182514348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,7 +389,6 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 2131556804784713712}
   - {fileID: 6588433217158088808}
-  - {fileID: 7098225791827583721}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &6588433217158088808
 MonoBehaviour:
@@ -473,19 +472,7 @@ MonoBehaviour:
     m_ActionId: 96f66dd7-8578-4413-802c-4f37ecd593db
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7098225791827583721}
-        m_TargetAssemblyTypeName: Mouse, Assembly-CSharp
-        m_MethodName: Fire
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 8f73b988-862f-480e-b5ca-4a492167bb38
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:

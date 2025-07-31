@@ -5,6 +5,7 @@ using UnityEngine;
 using Cinemachine;
 using Fusion.Addons.Physics;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
@@ -20,7 +21,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         NetworkRigidbody3D NRb;
     [SerializeField]
         CapsuleCollider playerCollider;
-    [SerializeField] Camera mainCam;
+    [SerializeField] Transform mainCam;
+    [SerializeField] TextMeshProUGUI referencesCheckText;
+    [SerializeField] CinemachineBrain cineBrain;
 
     [Header("References Manual")]
     [SerializeField]
@@ -30,10 +33,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     #region Input
     Vector2 moveInputVector = Vector2.zero;
-    public bool isJumping = false; public bool isGrounded = false;
+    bool isJumping = false; bool isGrounded = false;
     bool canAttack = true;
     Mouse mouseInputScript;
     float smoothVel;
+    float camRotTemp;
 
     //float rotationY, rotationX;
     #endregion
@@ -56,26 +60,41 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public override void Spawned()
     {
+        //Runner.SetIsSimulated(Object, Object.HasStateAuthority);
         if(Object.HasInputAuthority)
         {
             Local = this;
             Debug.Log("You have spawnned");
-            transform.name = "YOU";
+
+            transform.name = $"P_{Object.Id}";
+
+            //transform.name = "YOU";
 
             cineCamMain = GameObject.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
             cineCamAds = GameObject.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
 
+            cineBrain = FindObjectOfType<CinemachineBrain>();
+
             cineCamMain.m_Follow = transform.Find("Follow Target").transform;
             cineCamAds.m_Follow = transform.Find("Follow Target").transform;
             //cineCam.m_LookAt = transform;
-            mainCam = FindObjectOfType<Camera>();
+            mainCam = GameObject.Find("Main Camera").GetComponent<Transform>();
+
+            referencesCheckText = FindObjectOfType<TextMeshProUGUI>();
+            referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;
+            mouseInputScript.assignReferences();
         }
         else
         {
+            Debug.Log("This is the client spawnned");
             transform.name = $"P_{Object.Id}";
         }
 
-        
+        //transform.name = $"P_{Object.Id}";
+
+        //referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;
+
+
     }
 
     public NetworkInputData GetNetworkInput()
@@ -88,11 +107,19 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         networkInputData.mouseInput.y = mouseInputScript.rotationX;
 
         //jump
-        if (isJumping)
+        /*if (isJumping)
         {
-            networkInputData.isJumping = true;
-        }
+            networkInputData.isJumping = isJumping;
+        }*/
 
+        networkInputData.isJumping = isJumping;
+        networkInputData.camRotY = camRotTemp;
+
+        /*if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            isJumping = true;
+            networkInputData.isJumping = true;
+        }*/
 
         return networkInputData;
     }
@@ -103,45 +130,53 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         moveInputVector.x = Input.GetAxis("Horizontal");
         moveInputVector.y = Input.GetAxis("Vertical");
 
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if(Object.HasInputAuthority)
+        camRotTemp = mainCam.eulerAngles.y;
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             isJumping = true;
             Debug.Log("jumping");
         }
     }
 
+    public override void Render()
+    {
+        if(Object.HasInputAuthority)
+        {
+            cineBrain.ManualUpdate();
+            cineCamMain.UpdateCameraState(Vector3.up, Runner.LocalAlpha);
+        }
+    }
+
     public override void FixedUpdateNetwork()
     {
-        if(Object.HasStateAuthority)
+        if (Object.HasStateAuthority)
         {
             isGrounded = GroundCheck();
+
+            if (!isGrounded)
+            {
+                rb.AddForce(Vector3.down * 8f);
+            }
 
             if (transform.position.y < -20f)
             {
                 NRb.Teleport(Vector3.zero, Quaternion.identity);
             }
-
-            if (!isGrounded)
-                rb.AddForce(Vector3.down * 8f); //fix floaty players    
         }
 
-        if(GetInput(out NetworkInputData networkInputData))
+        if (GetInput(out NetworkInputData networkInputData))
         {
             float inputMag = networkInputData.moveInput.magnitude;
-            /*Vector3 localVeclocityVsFwd = transform.forward*Vector3.Dot(transform.forward, rb.velocity);
-            float localFwdVelocity = localVeclocityVsFwd.magnitude;*/
+            Vector3 moveDirn = new Vector3(networkInputData.moveInput.x, 0, networkInputData.moveInput.y).normalized;
 
-            /*rotationY += networkInputData.mouseInput.x;
-            rotationX -= networkInputData.mouseInput.y;
-            rotationX = Mathf.Clamp(rotationX, -80f, 80f);*/
 
             transform.rotation = Quaternion.Euler(0f, networkInputData.mouseInput.x, 0f); // Rotate player body
-
 
             if (mouseInputScript.orientation != null)
             {
                 mouseInputScript.orientation.rotation = Quaternion.Euler(0f, networkInputData.mouseInput.x, 0f);
-                Debug.Log("changing yaw to -> "+ networkInputData.mouseInput.x);// For movement direction
             }
 
             if (mouseInputScript.cameraHolder != null)
@@ -149,40 +184,39 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 mouseInputScript.cameraHolder.localRotation = Quaternion.Euler(networkInputData.mouseInput.y, 0f, 0f); // Rotate camera up/down
             }
 
-            Vector3 moveDirn = new Vector3(networkInputData.moveInput.x, 0, networkInputData.moveInput.y).normalized;
 
-            if(inputMag>0.02f)
+            if (inputMag > 0.2f)
             {
-                float desiredAngle = Mathf.Atan2(moveDirn.x, moveDirn.z)*Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
-                float currentAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, desiredAngle, ref smoothVel, 0.2f);
-                //transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                float desiredAngle = Mathf.Atan2(moveDirn.x, moveDirn.z) * Mathf.Rad2Deg + networkInputData.camRotY;
+                //float currentAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, desiredAngle, ref smoothVel, 0.2f);
 
 
-
-                //transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRot, Runner.DeltaTime*250f);
-
-                /*if (rb.velocity.magnitude < maxSpeed)
-                {
-                    rb.AddForce(transform.forward * inputMag * 30);
-                }*/
-
-                Vector3 moveDirn2 = Quaternion.Euler(0f,desiredAngle, 0f)*Vector3.forward.normalized;
-                rb.velocity = new Vector3(moveDirn2.x*maxSpeed, rb.velocity.y, moveDirn2.z*maxSpeed);
+                Vector3 moveDirn2 = Quaternion.Euler(0f, desiredAngle, 0f) * Vector3.forward.normalized;
+                rb.velocity = new Vector3(moveDirn2.x * maxSpeed, rb.velocity.y, moveDirn2.z * maxSpeed);
             }
 
-            if (isJumping)
+            if (networkInputData.isJumping)
             {
-                rb.AddForce(Vector3.up*15f, ForceMode.Impulse);
+                rb.AddForce(Vector3.up * 15f, ForceMode.Impulse);
                 Debug.Log("jumping");
                 isJumping = false;
+                networkInputData.isJumping = false;
             }
+
         }
 
+        if(Object.HasInputAuthority)
+        {
+            referencesCheckText.text = mouseInputScript.rotationY.ToString() + " and " + mouseInputScript.rotationX.ToString()+"\n"+"is Grounded:"+isGrounded+"\n"+"isJumping:"+isJumping;
+        }
     }
 
     public void PlayerLeft(PlayerRef player)
     {
-
+        if(Object.InputAuthority == player)
+        {
+            Runner.Despawn(Object);
+        }
     }
 
     bool GroundCheck()

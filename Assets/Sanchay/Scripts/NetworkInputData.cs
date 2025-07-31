@@ -7,4 +7,5 @@ public struct NetworkInputData : INetworkInput
     public NetworkBool isJumping;
     public NetworkBool canAttack;
     public Vector2 mouseInput;
+    public float camRotY;
 }

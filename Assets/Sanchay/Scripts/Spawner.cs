@@ -31,12 +31,16 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
+        Debug.Log("Host disconnected migrationg in progress");
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if(NetworkPlayer.Local!=null) 
+        if(NetworkPlayer.Local!=null)
+        {
+            //Debug.Log("assigned to " + NetworkPlayer.Local.name);
             input.Set(NetworkPlayer.Local.GetNetworkInput());
+        }
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

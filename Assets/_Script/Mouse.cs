@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Mouse : NetworkBehaviour
+public class Mouse : MonoBehaviour
 {
 
     [Header("Mouse Settings")]
@@ -34,6 +34,8 @@ public class Mouse : NetworkBehaviour
 
     void Update()
     {
+        //if (!Object.HasInputAuthority) return;
+
         mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
@@ -53,20 +55,49 @@ public class Mouse : NetworkBehaviour
         }*/
     }
 
-    public override void Spawned()
+    /*public NetworkInputData GetNetworkInput()
+    {
+        NetworkInputData networkInputData = new NetworkInputData();
+
+        //movement
+        networkInputData.moveInput = moveInputVector;
+        networkInputData.mouseInput.x = mouseInputScript.rotationY;
+        networkInputData.mouseInput.y = mouseInputScript.rotationX;
+
+        //jump
+        *//*if (isJumping)
+        {
+            networkInputData.isJumping = isJumping;
+        }*//*
+
+        networkInputData.isJumping = isJumping;
+        networkInputData.camRotY = camRotTemp;
+
+
+
+        return networkInputData;
+    }
+*/
+    /*public override void Spawned()
     {
         if(Object.HasInputAuthority)
         {
             MainCamera = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
             ADSCamera = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
         }
+    }*/
+
+    public void assignReferences()
+    {
+        MainCamera = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
+        ADSCamera = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
     }
 
-    public override void FixedUpdateNetwork()
+    /*public override void FixedUpdateNetwork()
     {
         if (Object.HasInputAuthority)
         {
-            /*transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
+            *//*transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
             if (orientation != null)
             {
                 orientation.rotation = Quaternion.Euler(0f, rotationY, 0f); // For movement direction
@@ -75,13 +106,13 @@ public class Mouse : NetworkBehaviour
             if (cameraHolder != null)
             {
                 cameraHolder.localRotation = Quaternion.Euler(rotationX, 0f, 0f); // Rotate camera up/down
-            }*/
+            }*//*
         }
-    }
+    }*/
 
     public void AimDownSights(InputAction.CallbackContext context)
     {
-        if (!Object.HasInputAuthority) return;
+        //if (!Object.HasInputAuthority) return;
 
         if (context.started)
         {
@@ -97,7 +128,7 @@ public class Mouse : NetworkBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
-        if (!Object.HasInputAuthority) return;
+        //if (!Object.HasInputAuthority) return;
         if (context.started && canFire)
         {
             StartCoroutine(FireWithCooldown());
