@@ -14,8 +14,8 @@ public class Mouse : NetworkBehaviour
     public Transform cameraHolder; // Assign the camera or its pivot here (used for vertical look)
     public CinemachineVirtualCamera MainCamera, ADSCamera;
 
-    private float rotationY; // Yaw (left/right)
-    private float rotationX; // Pitch (up/down)
+    public float rotationY; // Yaw (left/right)
+    public float rotationX; // Pitch (up/down)
 
     [Header("Shooting")]
     public GameObject Projectile;
@@ -23,6 +23,8 @@ public class Mouse : NetworkBehaviour
     public float projectileSpeed = 20f;
     public float fireCooldown = 0.2f;
     private bool canFire = true;
+
+    public float mouseX, mouseY;
 
     void Start()
     {
@@ -32,14 +34,14 @@ public class Mouse : NetworkBehaviour
 
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         rotationY += mouseX;
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -80f, 80f); // Clamp vertical look
 
-        transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
+        /*transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
         if (orientation != null)
         {
             orientation.rotation = Quaternion.Euler(0f, rotationY, 0f); // For movement direction
@@ -48,11 +50,39 @@ public class Mouse : NetworkBehaviour
         if (cameraHolder != null)
         {
             cameraHolder.localRotation = Quaternion.Euler(rotationX, 0f, 0f); // Rotate camera up/down
+        }*/
+    }
+
+    public override void Spawned()
+    {
+        if(Object.HasInputAuthority)
+        {
+            MainCamera = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
+            ADSCamera = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
+        }
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (Object.HasInputAuthority)
+        {
+            /*transform.rotation = Quaternion.Euler(0f, rotationY, 0f); // Rotate player body
+            if (orientation != null)
+            {
+                orientation.rotation = Quaternion.Euler(0f, rotationY, 0f); // For movement direction
+            }
+
+            if (cameraHolder != null)
+            {
+                cameraHolder.localRotation = Quaternion.Euler(rotationX, 0f, 0f); // Rotate camera up/down
+            }*/
         }
     }
 
     public void AimDownSights(InputAction.CallbackContext context)
     {
+        if (!Object.HasInputAuthority) return;
+
         if (context.started)
         {
             ADSCamera.Priority = 1;
@@ -67,6 +97,7 @@ public class Mouse : NetworkBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
+        if (!Object.HasInputAuthority) return;
         if (context.started && canFire)
         {
             StartCoroutine(FireWithCooldown());

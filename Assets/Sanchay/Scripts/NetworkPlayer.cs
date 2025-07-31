@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Fusion.Addons.Physics;
+using UnityEngine.InputSystem;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
@@ -31,8 +32,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     Vector2 moveInputVector = Vector2.zero;
     public bool isJumping = false; public bool isGrounded = false;
     bool canAttack = true;
-
+    Mouse mouseInputScript;
     float smoothVel;
+
+    //float rotationY, rotationX;
     #endregion
 
 
@@ -42,6 +45,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         rb = GetComponent<Rigidbody>();
         NRb = GetComponent<NetworkRigidbody3D>();
         playerCollider = GetComponent<CapsuleCollider>();
+        mouseInputScript = GetComponent<Mouse>();
     }
 
     // Start is called before the first frame update
@@ -58,8 +62,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Debug.Log("You have spawnned");
             transform.name = "YOU";
 
-            cineCamMain = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
-            cineCamAds = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
+            cineCamMain = GameObject.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
+            cineCamAds = GameObject.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
 
             cineCamMain.m_Follow = transform.Find("Follow Target").transform;
             cineCamAds.m_Follow = transform.Find("Follow Target").transform;
@@ -80,6 +84,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         //movement
         networkInputData.moveInput = moveInputVector;
+        networkInputData.mouseInput.x = mouseInputScript.rotationY;
+        networkInputData.mouseInput.y = mouseInputScript.rotationX;
 
         //jump
         if (isJumping)
@@ -115,8 +121,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 NRb.Teleport(Vector3.zero, Quaternion.identity);
             }
 
-            /*if (!isGrounded)
-                rb.AddForce(Vector3.down * 8f);*/ //fix floaty players    
+            if (!isGrounded)
+                rb.AddForce(Vector3.down * 8f); //fix floaty players    
         }
 
         if(GetInput(out NetworkInputData networkInputData))
@@ -125,19 +131,39 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             /*Vector3 localVeclocityVsFwd = transform.forward*Vector3.Dot(transform.forward, rb.velocity);
             float localFwdVelocity = localVeclocityVsFwd.magnitude;*/
 
+            /*rotationY += networkInputData.mouseInput.x;
+            rotationX -= networkInputData.mouseInput.y;
+            rotationX = Mathf.Clamp(rotationX, -80f, 80f);*/
+
+            transform.rotation = Quaternion.Euler(0f, networkInputData.mouseInput.x, 0f); // Rotate player body
+
+
+            if (mouseInputScript.orientation != null)
+            {
+                mouseInputScript.orientation.rotation = Quaternion.Euler(0f, networkInputData.mouseInput.x, 0f);
+                Debug.Log("changing yaw to -> "+ networkInputData.mouseInput.x);// For movement direction
+            }
+
+            if (mouseInputScript.cameraHolder != null)
+            {
+                mouseInputScript.cameraHolder.localRotation = Quaternion.Euler(networkInputData.mouseInput.y, 0f, 0f); // Rotate camera up/down
+            }
+
             Vector3 moveDirn = new Vector3(networkInputData.moveInput.x, 0, networkInputData.moveInput.y).normalized;
 
             if(inputMag>0.02f)
             {
-                float desiredAngle = Mathf.Atan2(moveDirn.x, moveDirn.z)*Mathf.Rad2Deg + mainCam.transform.rotation.y;
+                float desiredAngle = Mathf.Atan2(moveDirn.x, moveDirn.z)*Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
                 float currentAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, desiredAngle, ref smoothVel, 0.2f);
-                transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                //transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+
+
 
                 //transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRot, Runner.DeltaTime*250f);
 
-                /*if(rb.velocity.magnitude<maxSpeed)
+                /*if (rb.velocity.magnitude < maxSpeed)
                 {
-                    rb.AddForce(transform.forward*inputMag*30);
+                    rb.AddForce(transform.forward * inputMag * 30);
                 }*/
 
                 Vector3 moveDirn2 = Quaternion.Euler(0f,desiredAngle, 0f)*Vector3.forward.normalized;
@@ -146,7 +172,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             if (isJumping)
             {
-                rb.AddForce(Vector3.up*20, ForceMode.Impulse);
+                rb.AddForce(Vector3.up*15f, ForceMode.Impulse);
                 Debug.Log("jumping");
                 isJumping = false;
             }

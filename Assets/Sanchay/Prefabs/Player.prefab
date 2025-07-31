@@ -429,12 +429,16 @@ MonoBehaviour:
   mouseSensitivity: 1000
   orientation: {fileID: 3560940380964920774}
   cameraHolder: {fileID: 3560940380964920774}
-  MainCamera: {fileID: 2832336979869328840}
-  ADSCamera: {fileID: 3242848192448033118}
+  MainCamera: {fileID: 0}
+  ADSCamera: {fileID: 0}
+  rotationY: 0
+  rotationX: 0
   Projectile: {fileID: 4994892167078154172, guid: 8419dc7c5bff6aa4ea295043c006a39a, type: 3}
   firePoint: {fileID: 8243725054503983077}
   projectileSpeed: 20
   fireCooldown: 0.2
+  mouseX: 0
+  mouseY: 0
 --- !u!114 &3135762364870901323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,7 +566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2526600878228696100
 Transform:
   m_ObjectHideFlags: 0
@@ -786,7 +790,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7962159128177926149
 Transform:
   m_ObjectHideFlags: 0
