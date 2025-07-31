@@ -140,19 +140,27 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 if (!isParachuting && transform.position.y > deployHeight && rb.velocity.y < -0.1f)
                 {
                     isParachuting = true;
-                    parachuteVisual?.SetActive(true);
-                    cineCamParachute.Priority = 2;
-                    cineCamMain.Priority = 0;
-                    cineCamAds.Priority = 0;
+                    if(Object.HasInputAuthority)
+                    {
+                        parachuteVisual?.SetActive(true);
+                        cineCamParachute.Priority = 2;
+                        cineCamMain.Priority = 0;
+                        cineCamAds.Priority = 0;
+                    }
+                   
                 }
             }
             else if (isParachuting)
             {
                 isParachuting = false;
-                 parachuteVisual?.SetActive(false);
-                cineCamMain.Priority = 2;
-                cineCamParachute.Priority = 0;
-                cineCamAds.Priority = 1;
+                if (Object.HasInputAuthority)
+                {
+                    parachuteVisual?.SetActive(false);
+                    cineCamMain.Priority = 2;
+                    cineCamParachute.Priority = 0;
+                    cineCamAds.Priority = 1;
+                }
+               
             }
 
             // Clamp below world
