@@ -374,7 +374,8 @@ MonoBehaviour:
   maxSpeed: 7.5
   parachuteVisual: {fileID: 6901728952339435969}
   parachuteFallSpeed: 2
-  deployHeight: 15
+  deployHeight: 90
+  TeleportPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2742987548182514348
 MonoBehaviour:
   m_ObjectHideFlags: 0

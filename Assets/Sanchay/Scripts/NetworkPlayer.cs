@@ -11,7 +11,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
 
     public static NetworkPlayer Local { get; set; }
-
     [Header("References Auto")]
     [SerializeField] Rigidbody rb;
     [SerializeField] CinemachineVirtualCamera cineCamMain, cineCamAds,cineCamParachute;
@@ -41,6 +40,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     float camRotTemp;
     #endregion
 
+    [SerializeField] Vector3 TeleportPoint;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -69,7 +69,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             cineCamParachute.m_Follow = transform.Find("Follow Target");
             referencesCheckText = FindObjectOfType<TextMeshProUGUI>();
             referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;
-
+            TeleportPoint = GameObject.Find("Tp Point").transform.position;
             mouseInputScript.assignReferences();
         }
         else
@@ -166,7 +166,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             // Clamp below world
             if (transform.position.y < -20f)
             {
-                NRb.Teleport(Vector3.zero, Quaternion.identity);
+                NRb.Teleport(TeleportPoint, Quaternion.identity);
+                
             }
         }
 
