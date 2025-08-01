@@ -183,16 +183,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
 
             // Clamp below world
-            if (transform.position.y < -20f)
+            /*if (transform.position.y < -20f)
             {
                 NRb.Teleport(TeleportPoint, Quaternion.identity);
                 
-            }
+            }*/
         }
 
         if (GetInput(out NetworkInputData input))
         {
-            isGrounded = GroundCheck();
 
             float inputMag = input.moveInput.magnitude;
             Vector3 moveDir = new Vector3(input.moveInput.x, 0, input.moveInput.y).normalized;
@@ -244,12 +243,19 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 anim.SetTrigger("isHit");
             }
 
-            mouseInputScript.adsReal(input.isAiming);
         }
 
         if (Object.HasInputAuthority)
         {
-           // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
+            isGrounded = GroundCheck();
+            mouseInputScript.adsReal(input.isAiming);
+
+            if (transform.position.y < -20f)
+            {
+                NRb.Teleport(TeleportPoint, Quaternion.identity);
+
+            }
+            // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
     }
 
