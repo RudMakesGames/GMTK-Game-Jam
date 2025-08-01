@@ -182,7 +182,9 @@ public class Mouse : NetworkBehaviour
 
 
             Cinemachine.CinemachineImpulseSource source = spawnedProjectile.GetComponent<Cinemachine.CinemachineImpulseSource>();
-            source.GenerateImpulse(Camera.main.transform.forward);
+            //source.GenerateImpulse(Camera.main.transform.forward);
+            source.GenerateImpulse(player.mainCam.forward);
+
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
             if (rb != null)
             {

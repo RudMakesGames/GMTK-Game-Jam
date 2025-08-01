@@ -16,7 +16,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] CinemachineVirtualCamera cineCamMain, cineCamAds,cineCamParachute;
     [SerializeField] NetworkRigidbody3D NRb;
     [SerializeField] CapsuleCollider playerCollider;
-    [SerializeField] Transform mainCam;
+    public Transform mainCam;
     [SerializeField] Animator anim;
     [SerializeField] Respawner respawnerScript;
     //[SerializeField] TextMeshProUGUI referencesCheckText;
