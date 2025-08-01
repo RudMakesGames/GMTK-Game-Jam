@@ -205,6 +205,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyDelay: 10
+  SpawnedPoint: {fileID: 0}
+  isBoomerang: 0
 --- !u!114 &5951334286587238909
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -182,7 +182,7 @@ public class Mouse : NetworkBehaviour
             //NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
 
             spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation, Object.InputAuthority);
-
+            ProjectileRicochet ricochet = spawnedProjectile.GetComponent<ProjectileRicochet>();
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
             if (rb != null)
             {
