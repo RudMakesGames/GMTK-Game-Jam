@@ -21368,6 +21368,7 @@ GameObject:
   - component: {fileID: 1563042339532969729}
   - component: {fileID: 3627084282466591692}
   - component: {fileID: 3627084282466591693}
+  - component: {fileID: 3627084282466591694}
   m_Layer: 0
   m_Name: Daruma
   m_TagString: Untagged
@@ -21458,6 +21459,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ffe9222a5a2c84448e44d5632bf07b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3627084282466591694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058898734020933332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e155f05fcbb43a34baa51a9f92485703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentLevel: 
+  NextLevel: Rud
+  isALoadingScreen: 0
+  isAMenu: 0
+  TimeDelay: 3
+  PlayDelay: 1.25
+  Renderer: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

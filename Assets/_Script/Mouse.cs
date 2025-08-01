@@ -143,13 +143,13 @@ public class Mouse : NetworkBehaviour
         {
             ADSCamera.Priority = 1;
             MainCamera.Priority = 0;
-            Debug.Log("Started Aiming");
+            
         }
         else
         {
             ADSCamera.Priority = 0;
             MainCamera.Priority = 1;
-            Debug.Log("Stopped Aiming");
+           
         }
     }    
 

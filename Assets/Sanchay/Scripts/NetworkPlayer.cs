@@ -72,7 +72,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             cineCamParachute.m_Follow = transform.Find("Follow Target");
             /*referencesCheckText = FindObjectOfType<TextMeshProUGUI>();
             referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;*/
-            TeleportPoint = GameObject.Find("Tp Point").transform.position;
+            TeleportPoint = GameObject.Find("TpPoint").transform.position;
            // mouseInputScript.assignReferences();
             mouseInputScript.MainCamera = cineCamMain;
             mouseInputScript.ADSCamera = cineCamAds;
