@@ -307,6 +307,7 @@ MonoBehaviour:
   isAiming: 0
   isFiring: 0
   isHit: 0
+  shouldTp: 0
   TeleportPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2742987548182514348
 MonoBehaviour:
@@ -328,6 +329,7 @@ MonoBehaviour:
   - {fileID: 2131556804784713712}
   - {fileID: 6588433217158088808}
   - {fileID: 7098225791827583721}
+  - {fileID: 738912703170536785}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &6588433217158088808
 MonoBehaviour:

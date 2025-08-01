@@ -37,6 +37,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public bool isFiring;
     public bool isHit;
 
+    public bool shouldTp;
+
     #region Input
     Vector2 moveInputVector = Vector2.zero;
     bool isJumping = false;
@@ -183,11 +185,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
 
             // Clamp below world
-            /*if (transform.position.y < -20f)
+            if (transform.position.y < -20f)
             {
-                NRb.Teleport(TeleportPoint, Quaternion.identity);
-                
-            }*/
+                Tp(TeleportPoint);
+            }
+
+            if(shouldTp)
+            {
+                shouldTp = false;
+                Tp(TeleportPoint);
+            }
         }
 
         if (GetInput(out NetworkInputData input))
@@ -250,11 +257,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             isGrounded = GroundCheck();
             mouseInputScript.adsReal(input.isAiming);
 
-            if (transform.position.y < -20f)
-            {
-                NRb.Teleport(TeleportPoint, Quaternion.identity);
-
-            }
+            
             // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
     }
@@ -278,5 +281,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             isHit = true;
         }
+    }
+
+
+    public void Tp(Vector3 tpPoint)
+    {
+        NRb.Teleport(tpPoint, Quaternion.identity);
+        /*if (transform.position.y < -20f)
+        {
+            NRb.Teleport(TeleportPoint, Quaternion.identity);
+
+        }*/
     }
 }

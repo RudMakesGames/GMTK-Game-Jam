@@ -1,9 +1,11 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Respawner : MonoBehaviour
+public class Respawner : NetworkBehaviour
 {
     public int RespawnPoints;
     public int RequiredPoints = 4;
@@ -13,6 +15,10 @@ public class Respawner : MonoBehaviour
 
     private float timer = 0f;
     private bool timerActive = false;
+
+    Slider timeLeftSlider;
+
+    NetworkPlayer player;
 
 
     void Start()
@@ -41,6 +47,14 @@ public class Respawner : MonoBehaviour
 
         if (tp != null) TPpoint = tp.transform;
         else Debug.LogWarning("TP Point not found!");
+
+        player = GetComponent<NetworkPlayer>();
+
+
+        if(Object.HasInputAuthority)
+        timeLeftSlider = GameObject.Find("TimeLeft").GetComponent<Slider>();
+        timeLeftSlider.maxValue = respawnTimeLimit;
+        timeLeftSlider.gameObject.SetActive(false);
     }
 
     public void AddRespawnPoint()
@@ -78,7 +92,8 @@ public class Respawner : MonoBehaviour
 
         if (TPpoint != null)
         {
-            transform.position = TPpoint.position;
+            //transform.position = TPpoint.position;
+            player.shouldTp = true;
             Debug.Log("Teleported to TP Point: " + TPpoint.position);
         }
         else
@@ -94,6 +109,9 @@ public class Respawner : MonoBehaviour
         RespawnPoints = 0;
         timer = respawnTimeLimit;
         timerActive = false;
+
+        timeLeftSlider.gameObject.SetActive(false);
+
     }
 
     void Update()
@@ -101,6 +119,8 @@ public class Respawner : MonoBehaviour
         if (timerActive)
         {
             timer -= Time.deltaTime;
+
+            timeLeftSlider.value = timer;
 
             if (timer <= 0f)
             {
@@ -113,6 +133,7 @@ public class Respawner : MonoBehaviour
     {
         if (other.CompareTag("Bounds") && !timerActive)
         {
+            timeLeftSlider.gameObject.SetActive(true);
             Debug.Log("Entered Bounds – starting timer.");
             timerActive = true;
             timer = respawnTimeLimit;
