@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class Respawner : MonoBehaviour
@@ -16,10 +17,24 @@ public class Respawner : MonoBehaviour
 
     void Start()
     {
+        //timer = respawnTimeLimit;
+
+        /*GameObject sp = GameObject.Find("SpawnPoint");
+        GameObject tp = GameObject.Find("Tp Point");*/
+
+        /*if (sp != null) SpawnPoint = sp.transform;
+        else Debug.LogWarning("SpawnPoint not found!");
+
+        if (tp != null) TPpoint = tp.transform;
+        else Debug.LogWarning("TP Point not found!");*/
+    }
+
+    public void setReferences()
+    {
         timer = respawnTimeLimit;
 
         GameObject sp = GameObject.Find("SpawnPoint");
-        GameObject tp = GameObject.Find("Tp Point");
+        GameObject tp = GameObject.Find("TpPoint");
 
         if (sp != null) SpawnPoint = sp.transform;
         else Debug.LogWarning("SpawnPoint not found!");

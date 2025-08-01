@@ -18,6 +18,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] CapsuleCollider playerCollider;
     [SerializeField] Transform mainCam;
     [SerializeField] Animator anim;
+    [SerializeField] Respawner respawnerScript;
     //[SerializeField] TextMeshProUGUI referencesCheckText;
     [SerializeField] CinemachineBrain cineBrain;
 
@@ -53,6 +54,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         playerCollider = GetComponent<CapsuleCollider>();
         mouseInputScript = GetComponent<Mouse>();
         anim = GetComponent<Animator>();
+        respawnerScript = GetComponent<Respawner>();
     }
 
     public override void Spawned()
@@ -79,6 +81,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
            // mouseInputScript.assignReferences();
             mouseInputScript.MainCamera = cineCamMain;
             mouseInputScript.ADSCamera = cineCamAds;
+
+            respawnerScript.setReferences();
         }
         else
         {
@@ -146,7 +150,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     {
         if (Object.HasStateAuthority)
         {
-            isGrounded = GroundCheck();
+            //isGrounded = GroundCheck();
+
 
             // Auto deploy parachute from height
             if (!isGrounded)
@@ -187,6 +192,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         if (GetInput(out NetworkInputData input))
         {
+            isGrounded = GroundCheck();
+
             float inputMag = input.moveInput.magnitude;
             Vector3 moveDir = new Vector3(input.moveInput.x, 0, input.moveInput.y).normalized;
 
@@ -198,7 +205,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             if (inputMag > 0.2f)
             {
-                float desiredAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg + input.camRotY;
+                //float desiredAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg + input.camRotY;
+                float desiredAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg + mainCam.eulerAngles.y;
                 Vector3 rotatedDir = Quaternion.Euler(0f, desiredAngle, 0f) * Vector3.forward.normalized;
                 rb.velocity = new Vector3(rotatedDir.x * maxSpeed, rb.velocity.y, rotatedDir.z * maxSpeed);
             }

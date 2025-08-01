@@ -294,6 +294,8 @@ MonoBehaviour:
   NRb: {fileID: 6588433217158088808}
   playerCollider: {fileID: 4163507033433651059}
   mainCam: {fileID: 0}
+  anim: {fileID: 0}
+  respawnerScript: {fileID: 0}
   cineBrain: {fileID: 0}
   groundLayer:
     serializedVersion: 2
@@ -304,6 +306,7 @@ MonoBehaviour:
   deployHeight: 90
   isAiming: 0
   isFiring: 0
+  isHit: 0
   TeleportPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2742987548182514348
 MonoBehaviour:
@@ -498,7 +501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RespawnPoints: 0
   RequiredPoints: 3
-  respawnTimeLimit: 5
+  respawnTimeLimit: 30
   SpawnPoint: {fileID: 0}
   TPpoint: {fileID: 0}
 --- !u!95 &5836695956886096201
