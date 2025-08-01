@@ -10,4 +10,5 @@ public struct NetworkInputData : INetworkInput
     public NetworkBool parachuteRequested;
     public NetworkBool isFireButtonPressed;
     public NetworkBool isAiming;
+    public NetworkBool isHit;
 }

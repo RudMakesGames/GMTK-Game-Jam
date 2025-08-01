@@ -17,6 +17,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] NetworkRigidbody3D NRb;
     [SerializeField] CapsuleCollider playerCollider;
     [SerializeField] Transform mainCam;
+    [SerializeField] Animator anim;
     //[SerializeField] TextMeshProUGUI referencesCheckText;
     [SerializeField] CinemachineBrain cineBrain;
 
@@ -33,6 +34,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public bool isAiming;
     public bool isFiring;
+    public bool isHit;
 
     #region Input
     Vector2 moveInputVector = Vector2.zero;
@@ -50,6 +52,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         NRb = GetComponent<NetworkRigidbody3D>();
         playerCollider = GetComponent<CapsuleCollider>();
         mouseInputScript = GetComponent<Mouse>();
+        anim = GetComponent<Animator>();
     }
 
     public override void Spawned()
@@ -99,9 +102,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         input.parachuteRequested = parachuteRequested;
         input.isFireButtonPressed = isFiring;
         input.isAiming = isAiming;
+        input.isHit = isHit;
 
         isFiring = false;
         isJumping = false;
+        isHit = false;
         parachuteRequested = false; // Reset after send
         return input;
     }
@@ -226,6 +231,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 mouseInputScript.FireReal();
             }
 
+            if(input.isHit)
+            {
+                anim.SetTrigger("isHit");
+            }
+
             mouseInputScript.adsReal(input.isAiming);
         }
 
@@ -246,5 +256,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     bool GroundCheck()
     {
         return Physics.Raycast(transform.position + transform.up, Vector3.down, (playerCollider.height / 2) + 1.5f, groundLayer);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Bullet"))
+        {
+            isHit = true;
+        }
     }
 }
