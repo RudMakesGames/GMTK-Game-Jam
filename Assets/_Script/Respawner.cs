@@ -52,9 +52,11 @@ public class Respawner : NetworkBehaviour
 
 
         if(Object.HasInputAuthority)
-        timeLeftSlider = GameObject.Find("TimeLeft").GetComponent<Slider>();
-        timeLeftSlider.maxValue = respawnTimeLimit;
-        timeLeftSlider.gameObject.SetActive(false);
+        {
+            timeLeftSlider = GameObject.Find("TimeLeft").GetComponent<Slider>();
+            timeLeftSlider.maxValue = respawnTimeLimit;
+            timeLeftSlider.gameObject.SetActive(false);
+        }   
     }
 
     public void AddRespawnPoint()

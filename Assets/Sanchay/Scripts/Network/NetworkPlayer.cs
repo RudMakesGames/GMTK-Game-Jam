@@ -83,6 +83,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
            // mouseInputScript.assignReferences();
             mouseInputScript.MainCamera = cineCamMain;
             mouseInputScript.ADSCamera = cineCamAds;
+            mouseInputScript.mainCam = mainCam;
 
             respawnerScript.setReferences();
         }
@@ -248,6 +249,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             if(input.isHit)
             {
                 anim.SetTrigger("isHit");
+            }
+
+            if (shouldTp)
+            {
+                shouldTp = false;
+                Tp(TeleportPoint);
             }
 
         }

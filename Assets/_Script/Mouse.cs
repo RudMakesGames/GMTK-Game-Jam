@@ -14,6 +14,7 @@ public class Mouse : NetworkBehaviour
     public Transform orientation;
     public Transform cameraHolder; // Assign the camera or its pivot here (used for vertical look)
     public CinemachineVirtualCamera MainCamera, ADSCamera;
+    public Transform mainCam;
 
     public float rotationY; // Yaw (left/right)
     public float rotationX; // Pitch (up/down)
@@ -172,13 +173,15 @@ public class Mouse : NetworkBehaviour
     {
         canFire = false;
 
+        NetworkObject spawnedProjectile = null;
+
         if (Projectile != null && firePoint != null && Object.HasStateAuthority)
         {
             Quaternion projectileRotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 90);
             //GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
             //NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
 
-            var spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation, Object.InputAuthority);
+            spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation, Object.InputAuthority);
 
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
             if (rb != null)
@@ -186,13 +189,20 @@ public class Mouse : NetworkBehaviour
                 rb.velocity = firePoint.forward * projectileSpeed;
             }
 
-            if(Object.HasInputAuthority)
-            {
-                CinemachineImpulseSource source = spawnedProjectile.GetComponent<CinemachineImpulseSource>();
-                //source.GenerateImpulse(Camera.main.transform.forward);
-                source.GenerateImpulse(player.mainCam.forward);
-            }
+            CinemachineImpulseSource source = spawnedProjectile.GetComponent<CinemachineImpulseSource>();
+            source.GenerateImpulse(Camera.main.transform.forward);
+
+
+            //if(Object.HasInputAuthority)
+            //source.GenerateImpulse(mainCam.forward);
         }
+
+        /*if(Object.HasInputAuthority)
+        {
+            *//*CinemachineImpulseSource source = spawnedProjectile.GetComponent<CinemachineImpulseSource>();
+            source.GenerateImpulse(Camera.main.transform.forward);*//*
+
+        }*/
 
         yield return new WaitForSeconds(fireCooldown);
         canFire = true;
