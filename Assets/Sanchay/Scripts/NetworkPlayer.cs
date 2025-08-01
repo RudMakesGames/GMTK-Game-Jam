@@ -31,6 +31,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     private bool isParachuting = false;
     private bool parachuteRequested = false;
 
+    public bool isFiring;
+
     #region Input
     Vector2 moveInputVector = Vector2.zero;
     bool isJumping = false;
@@ -92,7 +94,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         input.isJumping = isJumping;
         input.camRotY = camRotTemp;
         input.parachuteRequested = parachuteRequested;
+        input.isFireButtonPressed = isFiring;
 
+        isFiring = false;
         parachuteRequested = false; // Reset after send
         return input;
     }
@@ -210,6 +214,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             {
                 rb.AddForce(Vector3.up * 15f, ForceMode.Impulse);
                 isJumping = false;
+            }
+
+            if(input.isFireButtonPressed)
+            {
+                mouseInputScript.FireReal();
             }
         }
 

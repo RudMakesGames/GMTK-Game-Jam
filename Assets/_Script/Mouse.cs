@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+//using static System.IO.Enumeration.FileSystemEnumerable<TResult>;
 
 public class Mouse : NetworkBehaviour
 {
@@ -26,6 +27,13 @@ public class Mouse : NetworkBehaviour
 
     public float mouseX, mouseY;
 
+    NetworkPlayer player;
+
+    private void Awake()
+    {
+        player = GetComponent<NetworkPlayer>();
+    }
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -34,7 +42,7 @@ public class Mouse : NetworkBehaviour
 
     void Update()
     {
-        //if (!Object.HasInputAuthority) return;
+        if (!Object.HasInputAuthority) return;
 
         mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -133,8 +141,14 @@ public class Mouse : NetworkBehaviour
         //if (!Object.HasInputAuthority) return;
         if (context.started && canFire)
         {
-            StartCoroutine(FireWithCooldown());
+            player.isFiring = true;
+            //StartCoroutine(FireWithCooldown());
         }
+    }
+
+    public void FireReal()
+    {
+        StartCoroutine(FireWithCooldown());
     }
 
     private IEnumerator FireWithCooldown()
@@ -145,7 +159,10 @@ public class Mouse : NetworkBehaviour
         {
             Quaternion projectileRotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 90);
             //GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
-            NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
+            //NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
+
+            var spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation, Object.InputAuthority);
+
 
             Cinemachine.CinemachineImpulseSource source = spawnedProjectile.GetComponent<Cinemachine.CinemachineImpulseSource>();
             source.GenerateImpulse(Camera.main.transform.forward);
