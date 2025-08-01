@@ -96,11 +96,11 @@ public class Respawner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        /*if (other.CompareTag("Bounds") && !timerActive)
+        if (other.CompareTag("Bounds") && !timerActive)
         {
             Debug.Log("Entered Bounds – starting timer.");
             timerActive = true;
             timer = respawnTimeLimit;
-        }*/
+        }
     }
 }
