@@ -180,15 +180,17 @@ public class Mouse : NetworkBehaviour
 
             var spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation, Object.InputAuthority);
 
-
-            Cinemachine.CinemachineImpulseSource source = spawnedProjectile.GetComponent<Cinemachine.CinemachineImpulseSource>();
-            //source.GenerateImpulse(Camera.main.transform.forward);
-            source.GenerateImpulse(player.mainCam.forward);
-
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 rb.velocity = firePoint.forward * projectileSpeed;
+            }
+
+            if(Object.HasInputAuthority)
+            {
+                CinemachineImpulseSource source = spawnedProjectile.GetComponent<CinemachineImpulseSource>();
+                //source.GenerateImpulse(Camera.main.transform.forward);
+                source.GenerateImpulse(player.mainCam.forward);
             }
         }
 
