@@ -10,6 +10,8 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
     [SerializeField] NetworkPlayer networkPlayerPrefab;
     NetworkRunnerHandler networkRunnerHandlerScript;
 
+    PlayerRef playerToSpawn;
+
     private void Awake()
     {
         networkRunnerHandlerScript = FindObjectOfType<NetworkRunnerHandler>();
@@ -17,6 +19,17 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
+        if (runner.IsServer)
+        {
+            Debug.Log("Connected to server spawnnign player");
+            Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
+            runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, playerToSpawn);
+        }
+        else
+        {
+            Debug.Log("Now clients joining");
+
+        }
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
@@ -63,6 +76,7 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        playerToSpawn = player;
         if (runner.IsServer)
         {
             Debug.Log("This is host");
