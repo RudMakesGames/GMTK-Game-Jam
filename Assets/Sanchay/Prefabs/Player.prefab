@@ -366,7 +366,6 @@ MonoBehaviour:
   NRb: {fileID: 6588433217158088808}
   playerCollider: {fileID: 4163507033433651059}
   mainCam: {fileID: 0}
-  referencesCheckText: {fileID: 0}
   cineBrain: {fileID: 0}
   groundLayer:
     serializedVersion: 2
@@ -375,6 +374,8 @@ MonoBehaviour:
   parachuteVisual: {fileID: 6901728952339435969}
   parachuteFallSpeed: 2
   deployHeight: 90
+  isAiming: 0
+  isFiring: 0
   TeleportPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2742987548182514348
 MonoBehaviour:

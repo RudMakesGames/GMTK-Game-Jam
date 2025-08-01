@@ -17,7 +17,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] NetworkRigidbody3D NRb;
     [SerializeField] CapsuleCollider playerCollider;
     [SerializeField] Transform mainCam;
-    [SerializeField] TextMeshProUGUI referencesCheckText;
+    //[SerializeField] TextMeshProUGUI referencesCheckText;
     [SerializeField] CinemachineBrain cineBrain;
 
     [Header("References Manual")]
@@ -31,6 +31,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     private bool isParachuting = false;
     private bool parachuteRequested = false;
 
+    public bool isAiming;
     public bool isFiring;
 
     #region Input
@@ -69,10 +70,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             cineCamMain.m_Follow = transform.Find("Follow Target");
             cineCamAds.m_Follow = transform.Find("Follow Target");
             cineCamParachute.m_Follow = transform.Find("Follow Target");
-            referencesCheckText = FindObjectOfType<TextMeshProUGUI>();
-            referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;
+            /*referencesCheckText = FindObjectOfType<TextMeshProUGUI>();
+            referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;*/
             TeleportPoint = GameObject.Find("Tp Point").transform.position;
-            mouseInputScript.assignReferences();
+           // mouseInputScript.assignReferences();
+            mouseInputScript.MainCamera = cineCamMain;
+            mouseInputScript.ADSCamera = cineCamAds;
         }
         else
         {
@@ -95,8 +98,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         input.camRotY = camRotTemp;
         input.parachuteRequested = parachuteRequested;
         input.isFireButtonPressed = isFiring;
+        input.isAiming = isAiming;
 
         isFiring = false;
+        isJumping = false;
         parachuteRequested = false; // Reset after send
         return input;
     }
@@ -213,18 +218,20 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             if (input.isJumping)
             {
                 rb.AddForce(Vector3.up * 15f, ForceMode.Impulse);
-                isJumping = false;
+                //isJumping = false;
             }
 
             if(input.isFireButtonPressed)
             {
                 mouseInputScript.FireReal();
             }
+
+            mouseInputScript.adsReal(input.isAiming);
         }
 
         if (Object.HasInputAuthority)
         {
-            referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
+           // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
     }
 

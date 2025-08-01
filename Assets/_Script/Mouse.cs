@@ -95,11 +95,11 @@ public class Mouse : NetworkBehaviour
         }
     }*/
 
-    public void assignReferences()
+    /*public void assignReferences()
     {
         MainCamera = transform.Find("Main Follow Camera").GetComponent<CinemachineVirtualCamera>();
         ADSCamera = transform.Find("ADS Follow Camera ").GetComponent<CinemachineVirtualCamera>();
-    }
+    }*/
 
     /*public override void FixedUpdateNetwork()
     {
@@ -122,19 +122,36 @@ public class Mouse : NetworkBehaviour
     {
         //if (!Object.HasInputAuthority) return;
 
+
         if (context.started)
+        {
+            player.isAiming = true;
+            
+        }
+        else if (context.canceled)
+        {
+            player.isAiming = false;
+            
+        }
+    }
+
+
+    public void adsReal(bool aiming)
+    {
+        if(Object.HasInputAuthority)
+        if(aiming)
         {
             ADSCamera.Priority = 1;
             MainCamera.Priority = 0;
             Debug.Log("Started Aiming");
         }
-        else if (context.canceled)
+        else
         {
             ADSCamera.Priority = 0;
             MainCamera.Priority = 1;
             Debug.Log("Stopped Aiming");
         }
-    }
+    }    
 
     public void Fire(InputAction.CallbackContext context)
     {
