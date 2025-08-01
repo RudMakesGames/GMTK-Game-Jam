@@ -10,7 +10,7 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
     [SerializeField] NetworkPlayer networkPlayerPrefab;
     NetworkRunnerHandler networkRunnerHandlerScript;
 
-    PlayerRef playerToSpawn;
+    //PlayerRef playerToSpawn;
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        if (runner.IsServer)
+        /*if (runner.IsServer)
         {
             Debug.Log("Connected to server spawnnign player");
             Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
@@ -29,7 +29,7 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("Now clients joining");
 
-        }
+        }*/
     }
 
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
@@ -76,17 +76,24 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        playerToSpawn = player;
-        if (runner.IsServer)
+        //playerToSpawn = player;
+        /*if (runner.IsServer)
         {
-            Debug.Log("This is host");
+            *//*Debug.Log("This is host");
             Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
-            runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
+            runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);*//*
         }
         else
         {
             Debug.Log("Now clients joining");
+            Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
+            runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
+        }*/
 
+        if (player == Runner.LocalPlayer)
+        {
+            Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
+            runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
         }
     }
 

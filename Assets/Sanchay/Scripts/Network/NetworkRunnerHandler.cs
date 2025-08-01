@@ -31,7 +31,7 @@ public class NetworkRunnerHandler : MonoBehaviour
             networkRunner.name = "Network Runner";
         }
 
-        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.Client, "TestSession", NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
+        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.Shared, "TestSession", NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
         Debug.Log("Network Runner Initialized");
     }
 

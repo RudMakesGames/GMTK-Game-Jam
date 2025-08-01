@@ -186,20 +186,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
 
             // Clamp below world
-            if (transform.position.y < -20f)
-            {
-                Tp(TeleportPoint);
-            }
-
-            if(shouldTp)
-            {
-                shouldTp = false;
-                Tp(TeleportPoint);
-            }
+            
         }
 
         if (GetInput(out NetworkInputData input))
         {
+
+            if (transform.position.y < -20f)
+            {
+                Tp(TeleportPoint);
+            }
 
             float inputMag = input.moveInput.magnitude;
             Vector3 moveDir = new Vector3(input.moveInput.x, 0, input.moveInput.y).normalized;
@@ -294,6 +290,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public void Tp(Vector3 tpPoint)
     {
         NRb.Teleport(tpPoint, Quaternion.identity);
+        rb.MovePosition(tpPoint);
         /*if (transform.position.y < -20f)
         {
             NRb.Teleport(TeleportPoint, Quaternion.identity);
