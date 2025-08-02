@@ -371,6 +371,7 @@ MonoBehaviour:
   cameraHolder: {fileID: 3560940380964920774}
   MainCamera: {fileID: 2832336979869328840}
   ADSCamera: {fileID: 3242848192448033118}
+  mainCam: {fileID: 0}
   rotationY: 0
   rotationX: 0
   Projectile: {fileID: 4994892167078154172, guid: 8419dc7c5bff6aa4ea295043c006a39a, type: 3}
@@ -975,6 +976,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -6536401690549236835, guid: 8bacf51319b26d04e817504396299ba4, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fc22d4eba55f443409e377aaf780c636, type: 2}
     - target: {fileID: 919132149155446097, guid: 8bacf51319b26d04e817504396299ba4, type: 3}
       propertyPath: m_Name
       value: railgun
