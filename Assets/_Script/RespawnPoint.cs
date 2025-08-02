@@ -14,6 +14,7 @@ public class RespawnPoint : MonoBehaviour
         if (collision.gameObject.GetComponent<Respawner>() != null)
         {
             collision.gameObject.GetComponent<Respawner>().AddRespawnPoint();
+            spawner?.OnCollectiblePickedUp();
             Destroy(gameObject);
         }
     }
