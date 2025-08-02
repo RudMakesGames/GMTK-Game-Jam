@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 131401ea5dec60f429eb19fe9cb0cdb5, type: 2}
+  - {fileID: 2100000, guid: 657a71b395d88344eb85664d46293404, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -207,6 +207,7 @@ MonoBehaviour:
   destroyDelay: 10
   SpawnedPoint: {fileID: 0}
   isBoomerang: 0
+  projectileVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &5951334286587238909
 MonoBehaviour:
   m_ObjectHideFlags: 0
