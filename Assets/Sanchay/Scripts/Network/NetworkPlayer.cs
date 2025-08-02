@@ -9,6 +9,18 @@ using TMPro;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
+    [Networked, OnChangedRender(nameof(OnNickNameChanged))]
+    public NetworkString<_16> nickName { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnMaterialChanged))]
+    public int materialIndex { get; set; }
+
+
+    //[Networked] int nickMat {  get; set; } 
+    public string nicknameTemp; public int materianIndexTemp;
+
+    public Material[] materials;
+
 
     public static NetworkPlayer Local { get; set; }
     [Header("References Auto")]
@@ -61,6 +73,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public override void Spawned()
     {
+        /*if(Object.HasStateAuthority)
+        {
+            nickName = CharacterSelector.selectedName;
+            //nickMat = CharacterSelector.selectedMat;
+        }*/
         if (Object.HasInputAuthority)
         {
             Local = this;
@@ -74,9 +91,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             cineBrain = FindObjectOfType<CinemachineBrain>();
             mainCam = GameObject.Find("Main Camera").transform;
             
-            cineCamMain.m_Follow = transform.Find("Follow Target");
-            cineCamAds.m_Follow = transform.Find("Follow Target");
-            cineCamParachute.m_Follow = transform.Find("Follow Target");
+            cineCamMain.m_Follow = transform.Find("Follow Target"); //cineCamMain.m_LookAt = transform.Find("Follow Target");
+            cineCamAds.m_Follow = transform.Find("Follow Target"); //cineCamAds.m_LookAt = transform.Find("Follow Target");
+            cineCamParachute.m_Follow = transform.Find("Follow Target"); //cineCamParachute.m_LookAt = transform.Find("Follow Target");
             /*referencesCheckText = FindObjectOfType<TextMeshProUGUI>();
             referencesCheckText.text = cineCamMain.m_Follow.name + transform.name + "\n" + cineCamAds.m_Follow.name + transform.name + "\n" + mainCam.name;*/
             TeleportPoint = GameObject.Find("TpPoint").transform.position;
@@ -87,24 +104,46 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             respawnerScript.setReferences();
 
-            /*transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
-            transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;*/
+            //transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
+            //transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;
+
+            //SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
+
+            //StartCoroutine(NameChangerCoroutine());
 
             if (parachuteVisual == null)
             {
                 parachuteVisual = GameObject.Find("ParachuteVisual");
             }
-            parachuteVisual?.SetActive(false);
+            parachuteVisual?.SetActive(false); //materianIndexTemp = PlayerPrefs.GetInt("SelectedMatIndex");
+            SetNameRPC(PlayerPrefs.GetString("PlayerNickName"), PlayerPrefs.GetInt("SelectedMatIndex"));
         }
         else
         {
             transform.name = $"P_{Object.Id}";
+            NetworkPlayer[] allPlayers = FindObjectsOfType<NetworkPlayer>();
+
+            foreach (NetworkPlayer player in allPlayers)
+            {
+                player.SetNameRPC(player.nicknameTemp, player.materianIndexTemp);
+            }
+            //this.SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
+            //SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
         }
 
-        transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
-        transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;
+        /*transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
+        transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;*/
 
     }
+
+    /*IEnumerator NameChangerCoroutine()
+    {
+        yield return new WaitForSeconds(25f);
+        Debug.Log("Calling RPC aagain");
+
+        SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
+
+    }*/
 
     public NetworkInputData GetNetworkInput()
     {
@@ -312,5 +351,37 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             NRb.Teleport(TeleportPoint, Quaternion.identity);
 
         }*/
+    }
+
+    public void OnNickNameChanged()
+    {
+        Debug.Log("setting nickname");
+        transform.GetComponentInChildren<TextMeshProUGUI>().text = nickName.ToString();
+        //nicknameTemp = nickname2;
+    
+    }
+
+    void OnMaterialChanged()
+    {
+        //helper empty method delegate ke liye
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void SetNameRPC(string nickname2, int matIndex2)
+    {
+        nicknameTemp = nickname2;
+        materianIndexTemp = matIndex2;
+        /*player.isHit = true;
+        rb.AddForce(projectileVelocity.normalized * knockBackStrength);
+        // The code inside here will run on the client which owns this object (has state and input authority).
+        Debug.Log("Received knockback on StateAuthority, Adding force to this object" + projectileVelocity.normalized * knockBackStrength);
+        NetworkedHealth -= 0.5f;
+        anim.SetTrigger("isHit");
+        Invoke("resetHitBool", 0.5f);*/
+        this.nickName = nickname2;
+        this.materialIndex = matIndex2;
+        transform.GetComponentInChildren<TextMeshProUGUI>().text = nickName.ToString();
+
+        transform.Find("PlayerMesh").GetComponent<Renderer>().material = materials[materialIndex];
     }
 }
