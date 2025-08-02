@@ -176,6 +176,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                         cineCamParachute.Priority = 2;
                         cineCamMain.Priority = 0;
                         cineCamAds.Priority = 0;
+                        rb.drag = 5;
                     }
                    
                 }
@@ -189,6 +190,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                     cineCamMain.Priority = 2;
                     cineCamParachute.Priority = 0;
                     cineCamAds.Priority = 1;
+                    rb.drag = 0;
                 }
                
             }
@@ -225,6 +227,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             // Manual parachute deploy
             if (input.parachuteRequested && !isGrounded && !isParachuting)
             {
+                rb.drag = 5;
                 isParachuting = true;
                  parachuteVisual?.SetActive(true);
                 cineCamParachute.Priority = 2;

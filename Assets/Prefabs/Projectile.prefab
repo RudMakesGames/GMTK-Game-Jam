@@ -206,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyDelay: 10
   SpawnedPoint: {fileID: 0}
-  isBoomerang: 0
+  isBoomerang: 1
   projectileVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &5951334286587238909
 MonoBehaviour:
