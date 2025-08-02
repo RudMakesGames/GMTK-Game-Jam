@@ -117,6 +117,7 @@ public class CharacterSelector : MonoBehaviour
         if (nameInputField != null)
         {
             selectedName = nameInputField.text;
+            PlayerPrefs.SetString("PlayerNickName", selectedName);
             Debug.Log("Selected Name -> " + selectedName);
         }
 
@@ -128,6 +129,7 @@ public class CharacterSelector : MonoBehaviour
                 prefabRenderer.material = materials[currentMaterialIndex];
                 selectedMat = materials[currentMaterialIndex];
                 Debug.Log("Selected Material -> " + selectedMat);
+                PlayerPrefs.SetInt("SelectedMatIndex", currentMaterialIndex);
             }
 
             Player.SetActive(false);
@@ -139,6 +141,8 @@ public class CharacterSelector : MonoBehaviour
                     darumaRenderer.material = materials[currentMaterialIndex];
             }
         }
+
+        PlayerPrefs.Save();
     }
 
     public void setGameMode(int  gameMode)

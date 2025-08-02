@@ -39,7 +39,7 @@ public class NetworkHitHandler : NetworkBehaviour
         Debug.Log("Received knockback on StateAuthority, Adding force to this object" + projectileVelocity.normalized*knockBackStrength);
         NetworkedHealth -= 0.5f;
         anim.SetTrigger("isHit");
-        Invoke("resetHitBool", 0.15f);
+        Invoke("resetHitBool", 0.5f);
     }
 
     void resetHitBool()
