@@ -87,18 +87,23 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             respawnerScript.setReferences();
 
-            transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
-            transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;
+            /*transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
+            transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;*/
+
+            if (parachuteVisual == null)
+            {
+                parachuteVisual = GameObject.Find("ParachuteVisual");
+            }
+            parachuteVisual?.SetActive(false);
         }
         else
         {
             transform.name = $"P_{Object.Id}";
         }
-        if (parachuteVisual == null)
-        {
-            parachuteVisual = GameObject.Find("ParachuteVisual");
-        }
-        parachuteVisual?.SetActive(false);
+
+        transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
+        transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;
+
     }
 
     public NetworkInputData GetNetworkInput()

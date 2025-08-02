@@ -7,6 +7,7 @@ using Fusion.Sockets;
 using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using Unity.Mathematics;
 
 public class NetworkRunnerHandler : MonoBehaviour
 {
@@ -31,8 +32,11 @@ public class NetworkRunnerHandler : MonoBehaviour
             networkRunner.name = "Network Runner";
         }
 
-        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.Shared, "TestSession", NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
-        Debug.Log("Network Runner Initialized");
+        GameMode mode2 = CharacterSelector.selectedMode == 1 ? GameMode.Shared : GameMode.Single;
+        string lobbyName = CharacterSelector.selectedMode == 1 ? "RoomSession" : UnityEngine.Random.Range(100, 999).ToString();
+
+        var clientTask = InitializeNetworkRunner(networkRunner, mode2, lobbyName, NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
+        Debug.Log("Network Runner Initialized with mode as " + mode2 +"and lobby as "+lobbyName);
     }
 
     INetworkSceneManager GetSceneManager(NetworkRunner runner)

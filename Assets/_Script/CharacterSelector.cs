@@ -81,6 +81,7 @@ public class CharacterSelector : MonoBehaviour
 
     public static Material selectedMat;
     public static string selectedName;
+    public static int selectedMode = 0;
 
     private int currentMaterialIndex = 0;
     private Renderer playerRenderer;
@@ -138,5 +139,10 @@ public class CharacterSelector : MonoBehaviour
                     darumaRenderer.material = materials[currentMaterialIndex];
             }
         }
+    }
+
+    public void setGameMode(int  gameMode)
+    {
+        selectedMode = gameMode;
     }
 }
