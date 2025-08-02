@@ -9,6 +9,8 @@ public class CharacterSelector : MonoBehaviour
     public GameObject Prefab;
     public GameObject Daruma;
 
+    public static Material selectedMat;
+
     private int currentMaterialIndex = 0;
     private Renderer playerRenderer;
 
@@ -46,6 +48,8 @@ public class CharacterSelector : MonoBehaviour
             if (prefabRenderer != null)
             {
                 prefabRenderer.material = materials[currentMaterialIndex];
+                selectedMat = materials[currentMaterialIndex];
+                Debug.Log("selected mat->" + selectedMat);
             }
             Player.SetActive(false);
             Daruma?.SetActive(true);

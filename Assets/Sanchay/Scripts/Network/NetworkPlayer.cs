@@ -86,6 +86,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             mouseInputScript.mainCam = mainCam;
 
             respawnerScript.setReferences();
+
+            transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
+            Debug.Log(transform.Find("PlayerMesh").GetComponent<Renderer>().material);
         }
         else
         {

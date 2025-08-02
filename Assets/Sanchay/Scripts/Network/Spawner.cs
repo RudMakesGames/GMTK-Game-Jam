@@ -94,6 +94,7 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
         {
             Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
             runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
+            //spawnnedPlayer.GetComponent<Renderer>().material = CharacterSelector.selectedMat;
         }
     }
 

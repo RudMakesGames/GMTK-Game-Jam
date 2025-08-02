@@ -996,7 +996,7 @@ PrefabInstance:
     - target: {fileID: -6536401690549236835, guid: 8bacf51319b26d04e817504396299ba4, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: fc22d4eba55f443409e377aaf780c636, type: 2}
+      objectReference: {fileID: 2100000, guid: d1938fa41106d4a489635a21679a1057, type: 2}
     - target: {fileID: 919132149155446097, guid: 8bacf51319b26d04e817504396299ba4, type: 3}
       propertyPath: m_Name
       value: railgun
