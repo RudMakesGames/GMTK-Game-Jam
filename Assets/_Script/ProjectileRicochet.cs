@@ -11,6 +11,8 @@ public class ProjectileRicochet : NetworkBehaviour
     public bool isBoomerang = false;
     private Rigidbody rb;
 
+    public Vector3 projectileVelocity;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -27,6 +29,13 @@ public class ProjectileRicochet : NetworkBehaviour
     {
         if (!hasCollided)
         {
+            if(collision.gameObject.CompareTag("Player"))
+            {
+                if(collision.gameObject.TryGetComponent<NetworkHitHandler>(out var hitHandler))
+                {
+                    hitHandler.DealDamageRpc(projectileVelocity);
+                }
+            }
             hasCollided = true;
             StartCoroutine(DestroyAfterDelay());
         }
@@ -38,6 +47,11 @@ public class ProjectileRicochet : NetworkBehaviour
         {
             Runner.Despawn(Object);
         }
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        projectileVelocity = rb.velocity;
     }
 
     IEnumerator StartBoomerang()

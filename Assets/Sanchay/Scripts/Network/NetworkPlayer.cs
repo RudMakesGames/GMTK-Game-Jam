@@ -24,7 +24,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     [Header("References Manual")]
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] float maxSpeed;
+    [SerializeField] float maxSpeed, knockBackStrength;
 
     [Header("Parachute Settings")]
     public GameObject parachuteVisual;
@@ -113,7 +113,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         isFiring = false;
         isJumping = false;
-        isHit = false;
+        //isHit = false;
         parachuteRequested = false; // Reset after send
         return input;
     }
@@ -206,7 +206,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             if (mouseInputScript.cameraHolder != null)
                 mouseInputScript.cameraHolder.localRotation = Quaternion.Euler(input.mouseInput.y, 0f, 0f);
 
-            if (inputMag > 0.2f)
+            if (inputMag > 0.2f && !input.isHit)
             {
                 float desiredAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg + input.camRotY;
                 //float desiredAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg + mainCam.eulerAngles.y;
@@ -242,10 +242,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 mouseInputScript.FireReal();
             }
 
-            if(input.isHit)
+            /*if(input.isHit)
             {
                 anim.SetTrigger("isHit");
-            }
+            }*/
 
             if (shouldTp)
             {
@@ -280,10 +280,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Bullet"))
+        /*if(collision.gameObject.CompareTag("Bullet") && Object.HasInputAuthority)
         {
+            anim.SetTrigger("isHit");
             isHit = true;
-        }
+            Vector3 bulletVelDirn = collision.gameObject.GetComponent<ProjectileRicochet>().projectileVelocity.normalized;
+            bulletVelDirn.y = 0;
+            Debug.Log(bulletVelDirn * knockBackStrength);
+            rb.AddForce(bulletVelDirn*knockBackStrength);
+        }*/
     }
 
 
