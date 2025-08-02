@@ -88,7 +88,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             respawnerScript.setReferences();
 
             transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
-            Debug.Log(transform.Find("PlayerMesh").GetComponent<Renderer>().material);
+            transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;
         }
         else
         {
