@@ -33,6 +33,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     bool quip1Called = false; bool quip2Called=false;
 
+    public bool isSinglePlayer=false;
+
 
     public static NetworkPlayer Local { get; set; }
     [Header("References Auto")]
@@ -44,7 +46,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] Animator anim;
     [SerializeField] Respawner respawnerScript;
     //[SerializeField] TextMeshProUGUI referencesCheckText;
-    [SerializeField] int currentWeaponIndex;
+    //[SerializeField] int currentWeaponIndex;
     [SerializeField] CinemachineBrain cineBrain;
     [SerializeField] TextMeshProUGUI matchTimerText;
 
@@ -133,11 +135,26 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             parachuteVisual?.SetActive(false); //materianIndexTemp = PlayerPrefs.GetInt("SelectedMatIndex");
             SetNameRPC(PlayerPrefs.GetString("PlayerNickName"), PlayerPrefs.GetInt("SelectedMatIndex"));
 
-            currentWeaponIndex = 0;
+           // currentWeaponIndex = 0;
 
             matchTimerText = GameObject.Find("MatchTimerText").GetComponent<TextMeshProUGUI>();
 
-            MatchManagerFinderHelper();
+            //if(Runner.IsSharedModeMasterClient) 
+                MatchManagerFinderHelper();
+            /*else
+            {
+                matchManagerInstance = FindObjectOfType<MatchManager>();
+                matchManagerInstance.MatchTime = 0;
+            }*/
+
+            Debug.Log(CharacterSelector.selectedMode);
+
+            if(CharacterSelector.selectedMode!=1)
+            {
+                Debug.Log("player has selected single player mode");
+                gameObject.AddComponent<PlayerRayCastScript>();
+                isSinglePlayer=true;
+            }
         }
         else
         {
@@ -217,6 +234,27 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 parachuteRequested = true;
             }
         }
+
+        /*if (isSinglePlayer)
+        {
+            Vector3 center = transform.position;
+
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                float angle = i * Mathf.PI * 2f / numberOfPoints;
+                Vector3 point = center + new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * radius;
+
+                // Direction: outward from center to point
+                Vector3 direction = (point - center).normalized;
+
+                Debug.DrawRay(center, direction * rayDistance, Color.red);
+
+                if (Physics.Raycast(center, direction, out RaycastHit hit, rayDistance, raycastMask))
+                {
+                    Debug.Log($"Ray {i} hit {hit.collider.name} at {hit.point}");
+                }
+            }
+        }*/
     }
 
     public override void Render()
@@ -275,16 +313,19 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             
         }
 
+
         if (GetInput(out NetworkInputData input))
         {
-            if (Input.GetButtonDown("WeaponSwitch"))
+            /*if (Input.GetButtonDown("WeaponSwitch"))
             {
                 currentWeapon = 1;
-            }
+            }*/
 
             if (transform.position.y < -20f)
             {
                 Tp(TeleportPoint);
+                this.respawnQuip();
+
             }
 
             float inputMag = input.moveInput.magnitude;
@@ -330,12 +371,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             if(input.isFireButtonPressed)
             {
-                if(currentWeapon==0)
+                if(currentWeapon!=2)
                 {
                     mouseInputScript.FireReal();
                 }
 
-                else if(currentWeapon==1)
+                else if(currentWeapon==2)
                 {
                     networkAnim.SetTrigger("spatulaAttack");
                 }
@@ -355,6 +396,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         }
 
+
+
         if (Object.HasInputAuthority)
         {
             isGrounded = GroundCheck();
@@ -365,14 +408,28 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             if (matchManagerInstance.MatchTime > 150f && matchManagerInstance.MatchTime < 160f && !quip1Called)
             {
                 quip1Called = true;
+                currentWeapon = 1;
             }
             else if(matchManagerInstance.MatchTime > 250f && !quip2Called)
             {
                 quip2Called = true;
+                currentWeapon = 2;
             }
 
             // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
+    }
+
+    public void respawnQuip()
+    {
+        Vector2 ogPos = GameObject.Find("QUIPS3").GetComponent<RectTransform>().position;
+        LeanTween.move(GameObject.Find("QUIPS3").GetComponent<RectTransform>(), new Vector2(725, 300), 1f).setEaseOutQuad().setOnComplete(() =>
+        {
+            LeanTween.delayedCall(GameObject.Find("QUIPS3").gameObject, 10f, () =>
+            {
+                LeanTween.move(GameObject.Find("QUIPS3").gameObject, ogPos, 0.5f).setEaseInQuad();
+            });
+        });
     }
 
     public void PlayerLeft(PlayerRef player)
@@ -436,7 +493,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             mouseInputScript.changeProjectile(1);
         }
-        else
+        else if(!this.loopMode)
         {
             mouseInputScript.changeProjectile(0);
         }
@@ -451,11 +508,35 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             case 0:
                 transform.Find("Follow Target").transform.Find("goldenspatula").gameObject.SetActive(false);
                 transform.Find("Follow Target").transform.Find("railgun").gameObject.SetActive(true);
+                loopMode = false;
             break;
 
             case 1:
+                transform.Find("Follow Target").transform.Find("goldenspatula").gameObject.SetActive(false);
+                transform.Find("Follow Target").transform.Find("railgun").gameObject.SetActive(true);
+                loopMode = true;
+                Vector2 ogPos = GameObject.Find("QUIPS1").GetComponent<RectTransform>().position;
+                LeanTween.move(GameObject.Find("QUIPS1").GetComponent<RectTransform>(), new Vector2(0, 0), 1f).setEaseOutQuad().setOnComplete(()=>
+                {
+                    LeanTween.delayedCall(GameObject.Find("QUIPS1").gameObject, 3.5f, () =>
+                    {
+                        LeanTween.move(GameObject.Find("QUIPS1").gameObject, ogPos, 0.5f).setEaseInQuad();
+                    });
+                });
+                break;
+            case 2:
                 transform.Find("Follow Target").transform.Find("railgun").gameObject.SetActive(false);
                 transform.Find("Follow Target").transform.Find("goldenspatula").gameObject.SetActive(true);
+                loopMode = false;
+                //LeanTween.move(GameObject.Find("QUIPS2"), new Vector2(0, 0), 0.5f).setLoopPingPong(1);
+                Vector2 ogPos2 = GameObject.Find("QUIPS2").GetComponent<RectTransform>().position;
+                LeanTween.move(GameObject.Find("QUIPS2").GetComponent<RectTransform>(), new Vector2(0, 0), 1f).setEaseOutQuad().setOnComplete(() =>
+                {
+                    LeanTween.delayedCall(GameObject.Find("QUIPS2").gameObject, 3.5f, () =>
+                    {
+                        LeanTween.move(GameObject.Find("QUIPS2").gameObject, ogPos2, 0.5f).setEaseInQuad();
+                    });
+                });
                 break;
         }
     }

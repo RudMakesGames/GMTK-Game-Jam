@@ -96,10 +96,17 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
         {
             Vector3 spawnPoint = networkRunnerHandlerScript.spawnPoint != null ? networkRunnerHandlerScript.spawnPoint.position : Vector3.zero;
             runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
+
+            if(CharacterSelector.selectedMode!=1)
+            {
+                runner.Spawn(matchManagerPrefab, Vector3.zero, Quaternion.identity, player);
+            }
             //spawnnedPlayer.GetComponent<Renderer>().material = CharacterSelector.selectedMat;
         }
 
-        if (runner.IsSharedModeMasterClient && matchManagerPrefab != null)
+        matchManagerInstance = GameObject.FindObjectOfType<MatchManager>();
+
+        if (runner.IsSharedModeMasterClient && matchManagerPrefab != null && matchManagerInstance==null)
         {
             runner.Spawn(matchManagerPrefab, Vector3.zero, Quaternion.identity, player);
         }

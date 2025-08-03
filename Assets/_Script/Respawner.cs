@@ -2,6 +2,7 @@ using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,7 @@ public class Respawner : NetworkBehaviour
     private bool timerActive = false;
 
     Slider timeLeftSlider;
+    TextMeshProUGUI timeLeftText;
 
     NetworkPlayer player;
 
@@ -56,6 +58,8 @@ public class Respawner : NetworkBehaviour
             timeLeftSlider = GameObject.Find("TimeLeft").GetComponent<Slider>();
             timeLeftSlider.maxValue = respawnTimeLimit;
             timeLeftSlider.gameObject.SetActive(false);
+            timeLeftText = GameObject.Find("RespawnTimer").GetComponent<TextMeshProUGUI>();
+            timeLeftText.gameObject.SetActive(false);
         }   
     }
 
@@ -85,7 +89,10 @@ public class Respawner : NetworkBehaviour
             Debug.LogWarning("No SpawnPoint set!");
         }
 
-        ResetState();
+        timeLeftSlider.gameObject.SetActive(false);
+        timeLeftText.gameObject.SetActive(false);
+
+        ResetState2(false);
     }
 
     private void Die()
@@ -103,24 +110,37 @@ public class Respawner : NetworkBehaviour
             Debug.LogWarning("TP Point is null!");
         }
 
-        ResetState();
+        timeLeftSlider.gameObject.SetActive(true);
+        timeLeftText.gameObject.SetActive(true);
+
+        ResetState2(true);
     }
 
-    private void ResetState()
+    private void ResetState2(bool dead)
     {
         RespawnPoints = 0;
         timer = respawnTimeLimit;
-        timerActive = false;
 
-        timeLeftSlider.gameObject.SetActive(false);
+        if(dead)
+        {
+            timerActive = true;
+            player.respawnQuip();
+        }
+        else
+        {
+            timerActive = false;
+        }
+
 
     }
 
-    void Update()
+
+    public override void FixedUpdateNetwork()
     {
         if (timerActive)
         {
-            timer -= Time.deltaTime;
+            timer -= Runner.DeltaTime;
+            timeLeftText.text = Mathf.FloorToInt(timer).ToString();
 
             timeLeftSlider.value = timer;
 

@@ -13,6 +13,8 @@ public class NetworkHitHandler : NetworkBehaviour
     public float knockBackStrength, swatBackStrength;
     NetworkPlayer player;
 
+    public NetworkPlayer lastHitPlayer;
+
 
     private void Awake()
     {

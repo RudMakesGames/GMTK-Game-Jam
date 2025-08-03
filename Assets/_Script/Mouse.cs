@@ -21,7 +21,7 @@ public class Mouse : NetworkBehaviour
 
     [Header("Shooting")]
     public GameObject Projectile, Batrang, Boomerang;
-    GameObject currentProjectile;
+    public GameObject currentProjectile;
     public Transform firePoint;
     public float projectileSpeed = 20f;
     public float fireCooldown = 0.2f;
@@ -196,7 +196,7 @@ public class Mouse : NetworkBehaviour
 
         NetworkObject spawnedProjectile = null;
 
-        if (currentProjectile != null && firePoint != null && Object.HasStateAuthority)
+        if (currentProjectile != null && firePoint != null && Object.HasStateAuthority || player.currentWeapon!=2)
         {
             Quaternion projectileRotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 90);
             //GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);

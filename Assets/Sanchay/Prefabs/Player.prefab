@@ -571,7 +571,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.81524104, y: 1.8985729, z: 0.14758044}
   m_Center: {x: -0.09237718, y: 1.390361, z: 0.02250501}
@@ -910,6 +910,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d1938fa41106d4a489635a21679a1057, type: 2}
   - {fileID: 2100000, guid: c85f1976101560940a9fc2f4b0d8930a, type: 2}
   matchManagerInstance: {fileID: 0}
+  isSinglePlayer: 0
   rb: {fileID: 2179148445135927330}
   cineCamMain: {fileID: 0}
   cineCamAds: {fileID: 0}
@@ -919,7 +920,6 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   anim: {fileID: 0}
   respawnerScript: {fileID: 0}
-  currentWeaponIndex: 0
   cineBrain: {fileID: 0}
   matchTimerText: {fileID: 0}
   groundLayer:
@@ -1006,6 +1006,7 @@ MonoBehaviour:
   Projectile: {fileID: 4994892167078154172, guid: 05ca111e43601bc4ea83101274f50a55, type: 3}
   Batrang: {fileID: 4994892167078154172, guid: d2ae334f008fb92479851c4c9e8ed56a, type: 3}
   Boomerang: {fileID: 4994892167078154172, guid: 8419dc7c5bff6aa4ea295043c006a39a, type: 3}
+  currentProjectile: {fileID: 0}
   firePoint: {fileID: 8243725054503983077}
   projectileSpeed: 20
   fireCooldown: 0.5
@@ -1173,6 +1174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockBackStrength: 1750
   swatBackStrength: 1800
+  lastHitPlayer: {fileID: 0}
   _NetworkedHealth: 100
 --- !u!114 &1601572937732892293
 MonoBehaviour:
