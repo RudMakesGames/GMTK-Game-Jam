@@ -6,18 +6,27 @@ public class PlayerRayCastScript : MonoBehaviour
 {
 
     [Header("Raycast Settings")]
-    public float radius = 5f;
+    public float radius = 9f;
     public int pointCount = 6;
-    public float raycastHeight = 5f;
+    public float raycastHeight = 6f;
     public LayerMask groundLayer;
 
     [Header("Output")]
     public List<Vector3> validGroundPoints = new List<Vector3>();
     public bool drawDebug = true;
 
+    public bool updatePos=true;
+
+    private void Start()
+    {
+        groundLayer = GetComponent<NetworkPlayer>().groundLayer;
+    }
+
     private void Update()
     {
         RaycastFromCircle();
+        if (validGroundPoints.Count > 0) updatePos = true;
+        else updatePos = false;
     }
 
     void RaycastFromCircle()

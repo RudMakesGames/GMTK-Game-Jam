@@ -924,7 +924,7 @@ MonoBehaviour:
   matchTimerText: {fileID: 0}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   maxSpeed: 7.5
   knockBackStrength: 3
   parachuteVisual: {fileID: 6901728952339435969}
@@ -934,6 +934,7 @@ MonoBehaviour:
   isFiring: 0
   isHit: 0
   shouldTp: 0
+  enemyPrefab: {fileID: 0}
   TeleportPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2742987548182514348
 MonoBehaviour:

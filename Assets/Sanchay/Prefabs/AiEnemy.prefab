@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 2348979665
+  SortKey: 3145652535
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 2179148445135927330}
   - component: {fileID: 5836695956886096201}
   - component: {fileID: -5090437454004345758}
+  - component: {fileID: 3132849978881255824}
   m_Layer: 0
   m_Name: AiEnemy
   m_TagString: Player
@@ -318,6 +319,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c34bd46674c6a2445847dbee1306e2a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextMovePoint: {x: 0, y: 0, z: 0}
+  projectilePrefab: {fileID: 4994892167078154172, guid: 05ca111e43601bc4ea83101274f50a55, type: 3}
+  projectileSpeed: 50
+--- !u!195 &3132849978881255824
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4533843056667973070}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.63
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.97
+  m_BaseOffset: 0.37
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6202538958977938182
 GameObject:
   m_ObjectHideFlags: 0

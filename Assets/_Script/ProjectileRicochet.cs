@@ -75,7 +75,15 @@ public class ProjectileRicochet : NetworkBehaviour
     IEnumerator DestroyAfterDelay()
     {
         yield return new WaitForSeconds(destroyDelay);
-        Runner.Despawn(Object);
+        
+        if(CharacterSelector.selectedMode!=1)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Runner.Despawn(Object);
+        }
     }
 }
     

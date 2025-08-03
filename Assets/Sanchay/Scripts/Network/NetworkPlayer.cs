@@ -51,7 +51,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] TextMeshProUGUI matchTimerText;
 
     [Header("References Manual")]
-    [SerializeField] LayerMask groundLayer;
+    public LayerMask groundLayer;
     [SerializeField] float maxSpeed, knockBackStrength;
 
     [Header("Parachute Settings")]
@@ -66,6 +66,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public bool isHit;
 
     public bool shouldTp;
+
+    public GameObject enemyPrefab;
 
     #region Input
     Vector2 moveInputVector = Vector2.zero;

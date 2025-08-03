@@ -5211,7 +5211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 23230227}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10788,6 +10788,67 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67882331}
   m_Mesh: {fileID: -5928785198427282456, guid: 64417568f04c35742bfa330225a545ec, type: 3}
+--- !u!1001 &72962551
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 16.890423
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 13.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.63039356
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.77627575
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 101.842
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4483234037915673228, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: SortKey
+      value: 3938373125
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533843056667973070, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_Name
+      value: AiEnemy (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
 --- !u!1 &79193842
 GameObject:
   m_ObjectHideFlags: 0
@@ -10882,7 +10943,7 @@ GameObject:
   - component: {fileID: 84871125}
   - component: {fileID: 84871127}
   - component: {fileID: 84871126}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10964,7 +11025,7 @@ GameObject:
   m_Component:
   - component: {fileID: 100340677}
   - component: {fileID: 100340678}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11010,7 +11071,7 @@ GameObject:
   m_Component:
   - component: {fileID: 109514690}
   - component: {fileID: 109514691}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11545,7 +11606,7 @@ GameObject:
   - component: {fileID: 162498172}
   - component: {fileID: 162498174}
   - component: {fileID: 162498173}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11793,7 +11854,7 @@ GameObject:
   m_Component:
   - component: {fileID: 173260936}
   - component: {fileID: 173260937}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12824,7 +12885,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 301775703}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12859,7 +12920,7 @@ GameObject:
   m_Component:
   - component: {fileID: 307440949}
   - component: {fileID: 307440950}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12905,7 +12966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 308170971}
   - component: {fileID: 308170972}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18149,7 +18210,7 @@ GameObject:
   - component: {fileID: 361500067}
   - component: {fileID: 361500066}
   - component: {fileID: 361500065}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19096,7 +19157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 498693508}
   - component: {fileID: 498693509}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19486,7 +19547,7 @@ GameObject:
   - component: {fileID: 524814510}
   - component: {fileID: 524814512}
   - component: {fileID: 524814511}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25183,7 +25244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 586933391}
   - component: {fileID: 586933392}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25334,6 +25395,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602038036}
   m_Mesh: {fileID: -3537709356157935800, guid: 64417568f04c35742bfa330225a545ec, type: 3}
+--- !u!1001 &612495773
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 16.890423
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 13.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.2961636
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.86767894
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.4971251
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 59.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237616939662217879, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533843056667973070, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
+      propertyPath: m_Name
+      value: AiEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
 --- !u!1 &619759975
 GameObject:
   m_ObjectHideFlags: 0
@@ -25461,7 +25579,7 @@ GameObject:
   - component: {fileID: 625117772}
   - component: {fileID: 625117771}
   - component: {fileID: 625117770}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25653,7 +25771,7 @@ GameObject:
   - component: {fileID: 628972189}
   - component: {fileID: 628972191}
   - component: {fileID: 628972190}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28152,7 +28270,7 @@ GameObject:
   - component: {fileID: 835543680}
   - component: {fileID: 835543682}
   - component: {fileID: 835543681}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28551,7 +28669,7 @@ GameObject:
   - component: {fileID: 904434434}
   - component: {fileID: 904434436}
   - component: {fileID: 904434435}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28632,7 +28750,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 931836694}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28699,7 +28817,7 @@ GameObject:
   m_Component:
   - component: {fileID: 938003537}
   - component: {fileID: 938003538}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28873,7 +28991,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 986503395}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29108,7 +29226,7 @@ GameObject:
   - component: {fileID: 1013795310}
   - component: {fileID: 1013795309}
   - component: {fileID: 1013795308}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29551,7 +29669,7 @@ GameObject:
   - component: {fileID: 1036203209}
   - component: {fileID: 1036203208}
   - component: {fileID: 1036203207}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30264,7 +30382,7 @@ GameObject:
   - component: {fileID: 1108188629}
   - component: {fileID: 1108188628}
   - component: {fileID: 1108188630}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41280,7 +41398,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1246400004}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41798,7 +41916,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1332437551}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42089,7 +42207,7 @@ GameObject:
   - component: {fileID: 1347913001}
   - component: {fileID: 1347913003}
   - component: {fileID: 1347913002}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42375,6 +42493,69 @@ Transform:
   m_Children:
   - {fileID: 549555508}
   m_Father: {fileID: 1140108331}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1380676293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1380676295}
+  - component: {fileID: 1380676294}
+  m_Layer: 0
+  m_Name: NavmeshSurface
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1380676294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380676293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 595bda74c24126a41aa56d2cae48c30b, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!4 &1380676295
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380676293}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 21.635532, y: 12.35, z: -18.691961}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1387239324
 GameObject:
@@ -48084,7 +48265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1467855953}
   - component: {fileID: 1467855954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58306,7 +58487,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1553763184}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58490,7 +58671,7 @@ GameObject:
   - component: {fileID: 1557691876}
   - component: {fileID: 1557691875}
   - component: {fileID: 1557691874}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58992,6 +59173,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2742987548182514348, guid: 04d7b8196d7a7fa49bd73cc11a5625cd, type: 3}
+      propertyPath: SortKey
+      value: 803787435
+      objectReference: {fileID: 0}
     - target: {fileID: 4237616939662217879, guid: 04d7b8196d7a7fa49bd73cc11a5625cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.58
@@ -59031,6 +59216,10 @@ PrefabInstance:
     - target: {fileID: 4237616939662217879, guid: 04d7b8196d7a7fa49bd73cc11a5625cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4483234037915673228, guid: 04d7b8196d7a7fa49bd73cc11a5625cd, type: 3}
+      propertyPath: SortKey
+      value: 780425440
       objectReference: {fileID: 0}
     - target: {fileID: 4533843056667973070, guid: 04d7b8196d7a7fa49bd73cc11a5625cd, type: 3}
       propertyPath: m_Name
@@ -75326,7 +75515,7 @@ GameObject:
   - component: {fileID: 1780775565}
   - component: {fileID: 1780775564}
   - component: {fileID: 1780775563}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75844,7 +76033,7 @@ GameObject:
   - component: {fileID: 1830675448}
   - component: {fileID: 1830675450}
   - component: {fileID: 1830675449}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76596,7 +76785,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1924240672}
   - component: {fileID: 1924240673}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76645,7 +76834,7 @@ GameObject:
   - component: {fileID: 1924510924}
   - component: {fileID: 1924510923}
   - component: {fileID: 1924510926}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76884,7 +77073,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1946209113}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76921,7 +77110,7 @@ GameObject:
   - component: {fileID: 1961034048}
   - component: {fileID: 1961034047}
   - component: {fileID: 1961034049}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77030,7 +77219,7 @@ GameObject:
   - component: {fileID: 1962600674}
   - component: {fileID: 1962600676}
   - component: {fileID: 1962600675}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78906,7 +79095,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2129446119}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79296,7 +79485,7 @@ GameObject:
   - component: {fileID: 6953485439545555517}
   - component: {fileID: 1197010422563297090}
   - component: {fileID: 28397242127587647}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Cabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80340,7 +80529,7 @@ GameObject:
   - component: {fileID: 2670269341333035887}
   - component: {fileID: 2101464877207738616}
   - component: {fileID: 4654680758955231118}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82972,7 +83161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6183918827589397002}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: baloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84428,3 +84617,6 @@ SceneRoots:
   - {fileID: 1598803618}
   - {fileID: 297908934}
   - {fileID: 1902014270}
+  - {fileID: 1380676295}
+  - {fileID: 612495773}
+  - {fileID: 72962551}
