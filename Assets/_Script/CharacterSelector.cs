@@ -83,6 +83,10 @@ public class CharacterSelector : MonoBehaviour
     public static string selectedName;
     public static int selectedMode = 0;
 
+    public static string RoomCode;
+
+    public TextMeshProUGUI roomCodeTextCreate, roomCodeTextJoin;
+
     private int currentMaterialIndex = 0;
     private Renderer playerRenderer;
 
@@ -110,6 +114,23 @@ public class CharacterSelector : MonoBehaviour
     private void ApplyMaterial()
     {
         playerRenderer.material = materials[currentMaterialIndex];
+    }
+
+    public void SetRoomCode()
+    {
+        RoomCode = null;
+    }
+
+    public void SetRoomCodeCreate()
+    {
+        RoomCode = roomCodeTextCreate.text.ToString();
+        Debug.Log("room code->" +RoomCode);
+    }
+
+    public void SetRoomCodeJoin()
+    {
+        RoomCode = roomCodeTextJoin.text.ToString();
+        Debug.Log("room code->" + RoomCode);
     }
 
     public void ConfirmSelection()
@@ -141,6 +162,8 @@ public class CharacterSelector : MonoBehaviour
                     darumaRenderer.material = materials[currentMaterialIndex];
             }
         }
+        
+
 
         PlayerPrefs.Save();
     }

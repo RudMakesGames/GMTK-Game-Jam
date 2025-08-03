@@ -61,6 +61,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     private bool isParachuting = false;
     private bool parachuteRequested = false;
 
+    bool matchEnded = false;
+
     public bool isAiming;
     public bool isFiring;
     public bool isHit;
@@ -416,6 +418,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             {
                 quip2Called = true;
                 currentWeapon = 2;
+            }
+
+            if(matchManagerInstance.MatchTime>350f && !matchEnded)
+            {
+                matchEnded = true;
+                LeanTween.move(GameObject.Find("QUIPS4").GetComponent<RectTransform>(), new Vector2(0, 0), 1f).setEaseOutQuad();
             }
 
             // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";

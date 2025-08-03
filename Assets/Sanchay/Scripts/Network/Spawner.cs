@@ -117,6 +117,16 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        if (runner.IsSharedModeMasterClient)
+        {
+            Debug.Log("I am now the new Shared Mode Master Client");
+            var matchManagerNewInstance = FindObjectOfType<MatchManager>();
+
+            if (matchManagerNewInstance != null && matchManagerNewInstance.HasInputAuthority == false)
+            {
+                matchManagerInstance.GetComponent<NetworkObject>().AssignInputAuthority(runner.LocalPlayer);
+            }
+        }
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)

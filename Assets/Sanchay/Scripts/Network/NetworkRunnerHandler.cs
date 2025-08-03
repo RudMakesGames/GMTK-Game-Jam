@@ -33,7 +33,7 @@ public class NetworkRunnerHandler : MonoBehaviour
         }
 
         GameMode mode2 = CharacterSelector.selectedMode == 1 ? GameMode.Shared : GameMode.Single;
-        string lobbyName = CharacterSelector.selectedMode == 1 ? "RoomSessionTest" : UnityEngine.Random.Range(100, 999).ToString();
+        string lobbyName = CharacterSelector.selectedMode == 1 ? CharacterSelector.RoomCode : UnityEngine.Random.Range(100, 999).ToString();
 
         var clientTask = InitializeNetworkRunner(networkRunner, mode2, lobbyName, NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
         Debug.Log("Network Runner Initialized with mode as " + mode2 +"and lobby as "+lobbyName);
