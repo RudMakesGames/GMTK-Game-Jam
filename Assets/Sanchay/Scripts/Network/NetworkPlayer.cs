@@ -15,11 +15,19 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [Networked, OnChangedRender(nameof(OnMaterialChanged))]
     public int materialIndex { get; set; }
 
+    [Networked, OnChangedRender(nameof(OnWeaponChanged))]
+    public int currentWeapon { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnProjectileChanged))]
+    public NetworkBool loopMode { get; set; }
+
 
     //[Networked] int nickMat {  get; set; } 
     public string nicknameTemp; public int materianIndexTemp;
 
     public Material[] materials;
+
+    NetworkMecanimAnimator networkAnim;
 
 
     public static NetworkPlayer Local { get; set; }
@@ -32,6 +40,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] Animator anim;
     [SerializeField] Respawner respawnerScript;
     //[SerializeField] TextMeshProUGUI referencesCheckText;
+    [SerializeField] int currentWeaponIndex;
     [SerializeField] CinemachineBrain cineBrain;
 
     [Header("References Manual")]
@@ -68,6 +77,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         playerCollider = GetComponent<CapsuleCollider>();
         mouseInputScript = GetComponent<Mouse>();
         anim = GetComponent<Animator>();
+        networkAnim = GetComponent<NetworkMecanimAnimator>();
         respawnerScript = GetComponent<Respawner>();
     }
 
@@ -117,6 +127,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
             parachuteVisual?.SetActive(false); //materianIndexTemp = PlayerPrefs.GetInt("SelectedMatIndex");
             SetNameRPC(PlayerPrefs.GetString("PlayerNickName"), PlayerPrefs.GetInt("SelectedMatIndex"));
+
+            currentWeaponIndex = 0;
+
+
         }
         else
         {
@@ -157,6 +171,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         input.isFireButtonPressed = isFiring;
         input.isAiming = isAiming;
         input.isHit = isHit;
+        //input.currentWeapon = currentWeaponIndex;
 
         isFiring = false;
         isJumping = false;
@@ -240,6 +255,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         if (GetInput(out NetworkInputData input))
         {
+            if (Input.GetButtonDown("WeaponSwitch"))
+            {
+                currentWeapon = 1;
+            }
 
             if (transform.position.y < -20f)
             {
@@ -289,7 +308,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             if(input.isFireButtonPressed)
             {
-                mouseInputScript.FireReal();
+                if(currentWeapon==0)
+                {
+                    mouseInputScript.FireReal();
+                }
+
+                else if(currentWeapon==1)
+                {
+                    networkAnim.SetTrigger("spatulaAttack");
+                }
+                    //spatulaAttackCode
             }
 
             /*if(input.isHit)
@@ -366,6 +394,41 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         //helper empty method delegate ke liye
     }
 
+    void OnProjectileChanged()
+    {
+        if(this.loopMode && this.materialIndex==0)
+        {
+            mouseInputScript.changeProjectile(2);
+        }
+        else if(this.loopMode && this.materialIndex!=0)
+        {
+            mouseInputScript.changeProjectile(1);
+        }
+        else
+        {
+            mouseInputScript.changeProjectile(0);
+        }
+    }
+
+
+    void OnWeaponChanged()
+    {
+        Debug.Log("changing weapons");
+        switch(currentWeapon)
+        {
+            case 0:
+                transform.Find("Follow Target").transform.Find("goldenspatula").gameObject.SetActive(false);
+                transform.Find("Follow Target").transform.Find("railgun").gameObject.SetActive(true);
+            break;
+
+            case 1:
+                transform.Find("Follow Target").transform.Find("railgun").gameObject.SetActive(false);
+                transform.Find("Follow Target").transform.Find("goldenspatula").gameObject.SetActive(true);
+                break;
+        }
+    }
+
+
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void SetNameRPC(string nickname2, int matIndex2)
     {
@@ -380,7 +443,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         Invoke("resetHitBool", 0.5f);*/
         this.nickName = nickname2;
         this.materialIndex = matIndex2;
-        transform.GetComponentInChildren<TextMeshProUGUI>().text = nickName.ToString();
+
+        TextMeshProUGUI[] nameTexts = transform.GetComponentsInChildren<TextMeshProUGUI>();
+        foreach (var nameText in nameTexts)
+        {
+            nameText.text = nickName.ToString();
+        }
+        //transform.GetComponentInChildren<TextMeshProUGUI>().text = nickName.ToString();
 
         transform.Find("PlayerMesh").GetComponent<Renderer>().material = materials[materialIndex];
     }

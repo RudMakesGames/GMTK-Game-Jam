@@ -96,6 +96,8 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
             runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
             //spawnnedPlayer.GetComponent<Renderer>().material = CharacterSelector.selectedMat;
         }
+
+        /*if(runner.IsSharedModeMasterClient)*/
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

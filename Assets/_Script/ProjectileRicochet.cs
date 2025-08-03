@@ -31,9 +31,11 @@ public class ProjectileRicochet : NetworkBehaviour
         {
             if(collision.gameObject.CompareTag("Player"))
             {
+                Debug.Log("collison detected");
                 if(collision.gameObject.TryGetComponent<NetworkHitHandler>(out var hitHandler))
                 {
                     hitHandler.DealDamageRpc(projectileVelocity);
+                    Debug.Log("RPC call sent out");
                 }
             }
             hasCollided = true;

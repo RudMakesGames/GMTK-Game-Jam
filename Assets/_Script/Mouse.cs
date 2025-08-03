@@ -20,7 +20,8 @@ public class Mouse : NetworkBehaviour
     public float rotationX; // Pitch (up/down)
 
     [Header("Shooting")]
-    public GameObject Projectile;
+    public GameObject Projectile, Batrang, Boomerang;
+    GameObject currentProjectile;
     public Transform firePoint;
     public float projectileSpeed = 20f;
     public float fireCooldown = 0.2f;
@@ -29,16 +30,20 @@ public class Mouse : NetworkBehaviour
     public float mouseX, mouseY;
 
     NetworkPlayer player;
+    //NetworkMecanimAnimator networkAnim;
 
     private void Awake()
     {
         player = GetComponent<NetworkPlayer>();
+        //networkAnim = GetComponent<NetworkMecanimAnimator>();
     }
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        currentProjectile = Projectile;
     }
 
     void Update()
@@ -169,19 +174,35 @@ public class Mouse : NetworkBehaviour
         StartCoroutine(FireWithCooldown());
     }
 
+    public void changeProjectile(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                currentProjectile = Projectile;
+                break;
+            case 1:
+                currentProjectile = Boomerang;
+                break;
+            case 2:
+                currentProjectile = Batrang;
+                break;
+        }
+    }
+
     private IEnumerator FireWithCooldown()
     {
         canFire = false;
 
         NetworkObject spawnedProjectile = null;
 
-        if (Projectile != null && firePoint != null && Object.HasStateAuthority)
+        if (currentProjectile != null && firePoint != null && Object.HasStateAuthority)
         {
             Quaternion projectileRotation = Quaternion.LookRotation(firePoint.forward) * Quaternion.Euler(0, 90, 90);
             //GameObject spawnedProjectile = Instantiate(Projectile, firePoint.position, projectileRotation);
             //NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
 
-            spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation, Object.InputAuthority);
+            spawnedProjectile = Runner.Spawn(currentProjectile, firePoint.position, projectileRotation, Object.InputAuthority);
             ProjectileRicochet ricochet = spawnedProjectile.GetComponent<ProjectileRicochet>();
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
             if (rb != null)

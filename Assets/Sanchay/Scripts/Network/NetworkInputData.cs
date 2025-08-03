@@ -11,4 +11,6 @@ public struct NetworkInputData : INetworkInput
     public NetworkBool isFireButtonPressed;
     public NetworkBool isAiming;
     public NetworkBool isHit;
+    //public NetworkBool changeWeapon;
+    //public int currentWeapon;
 }

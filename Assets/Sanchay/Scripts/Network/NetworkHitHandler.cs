@@ -7,9 +7,10 @@ using UnityEngine;
 public class NetworkHitHandler : NetworkBehaviour
 {
     Animator anim;
+    NetworkMecanimAnimator networkAnim;
     NetworkRigidbody3D Nrb;
     Rigidbody rb;
-    public float knockBackStrength;
+    public float knockBackStrength, swatBackStrength;
     NetworkPlayer player;
 
 
@@ -19,6 +20,7 @@ public class NetworkHitHandler : NetworkBehaviour
         Nrb = GetComponent<NetworkRigidbody3D>();
         rb = GetComponent<Rigidbody>();
         player = GetComponent<NetworkPlayer>();
+        networkAnim = GetComponent<NetworkMecanimAnimator>();
     }
 
     [Networked, OnChangedRender(nameof(HealthChanged))]
@@ -38,7 +40,25 @@ public class NetworkHitHandler : NetworkBehaviour
         // The code inside here will run on the client which owns this object (has state and input authority).
         Debug.Log("Received knockback on StateAuthority, Adding force to this object" + projectileVelocity.normalized*knockBackStrength);
         NetworkedHealth -= 0.5f;
-        anim.SetTrigger("isHit");
+        //anim.SetTrigger("isHit");
+        networkAnim.SetTrigger("isHit");
+        Invoke("resetHitBool", 0.5f);
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void GetSwattedRPC(Vector3 hitPoint)
+    {
+        player.isHit = true;
+        //Vector3 forceDirn = Vector3.Dot((hitPoint - player.transform.position).normalized, transform.right)>0 ? -transform.right : transform.right;
+        Vector3 forceDirn = (player.transform.position-hitPoint).normalized;
+        forceDirn.y = 0;
+
+        rb.AddForce(forceDirn.normalized * swatBackStrength);
+        // The code inside here will run on the client which owns this object (has state and input authority).
+        Debug.Log("Received knockback on StateAuthority, Adding force to this object" + forceDirn.normalized * swatBackStrength);
+        NetworkedHealth -= 0.5f;
+        //anim.SetTrigger("isHit");
+        networkAnim.SetTrigger("isHit");
         Invoke("resetHitBool", 0.5f);
     }
 
