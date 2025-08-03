@@ -10,4 +10,6 @@ public class OverlayEnabler : MonoBehaviour
     {
         overlayCamera.SetActive(true);
     }
+    public void disableOverlayCamera()
+        { overlayCamera.SetActive(false); }
 }
