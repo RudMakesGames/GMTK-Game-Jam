@@ -29377,7 +29377,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: fc22d4eba55f443409e377aaf780c636, type: 2}
   - {fileID: 2100000, guid: d1938fa41106d4a489635a21679a1057, type: 2}
   - {fileID: 2100000, guid: c85f1976101560940a9fc2f4b0d8930a, type: 2}
-  - {fileID: 2100000, guid: d19377c2f4e08b74989d9e29c997a1a3, type: 2}
   Player: {fileID: 1058241160}
   Prefab: {fileID: 4533843056667973070, guid: 04d7b8196d7a7fa49bd73cc11a5625cd, type: 3}
   Daruma: {fileID: 1058898734020933332}
