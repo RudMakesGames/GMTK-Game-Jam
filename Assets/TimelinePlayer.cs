@@ -17,8 +17,12 @@ public class TimelinePlayer : MonoBehaviour
         SceneManager.LoadScene(NextScene);
     }
     
-    void Update()
+    public void SkipLevel()
     {
-        
+        SceneManager.LoadScene(NextScene);
+    }
+    public void Skip()
+    {
+        Invoke(nameof(SkipLevel),2);
     }
 }
