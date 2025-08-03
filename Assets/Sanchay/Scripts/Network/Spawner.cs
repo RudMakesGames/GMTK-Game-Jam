@@ -8,6 +8,8 @@ using System;
 public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] NetworkPlayer networkPlayerPrefab;
+    [SerializeField] MatchManager matchManagerPrefab;
+    private MatchManager matchManagerInstance;
     NetworkRunnerHandler networkRunnerHandlerScript;
 
     //PlayerRef playerToSpawn;
@@ -96,6 +98,12 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
             runner.Spawn(networkPlayerPrefab.gameObject, spawnPoint, Quaternion.identity, player);
             //spawnnedPlayer.GetComponent<Renderer>().material = CharacterSelector.selectedMat;
         }
+
+        if (runner.IsSharedModeMasterClient && matchManagerPrefab != null)
+        {
+            runner.Spawn(matchManagerPrefab, Vector3.zero, Quaternion.identity, player);
+        }
+        else if (!runner.IsSharedModeMasterClient) Debug.Log("No timer for you lil boy");
 
         /*if(runner.IsSharedModeMasterClient)*/
     }

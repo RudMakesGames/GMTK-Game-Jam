@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkPlayerPrefab: {fileID: 2131556804784713712, guid: 04d7b8196d7a7fa49bd73cc11a5625cd, type: 3}
+  matchManagerPrefab: {fileID: 6095694583216863687, guid: 6d649d2b80b8557468dd5e99cb4b9645, type: 3}
 --- !u!114 &8933058922300575318
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -29,6 +29,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     NetworkMecanimAnimator networkAnim;
 
+    public MatchManager matchManagerInstance;
+
+    bool quip1Called = false; bool quip2Called=false;
+
 
     public static NetworkPlayer Local { get; set; }
     [Header("References Auto")]
@@ -42,6 +46,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     //[SerializeField] TextMeshProUGUI referencesCheckText;
     [SerializeField] int currentWeaponIndex;
     [SerializeField] CinemachineBrain cineBrain;
+    [SerializeField] TextMeshProUGUI matchTimerText;
 
     [Header("References Manual")]
     [SerializeField] LayerMask groundLayer;
@@ -130,7 +135,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             currentWeaponIndex = 0;
 
+            matchTimerText = GameObject.Find("MatchTimerText").GetComponent<TextMeshProUGUI>();
 
+            MatchManagerFinderHelper();
         }
         else
         {
@@ -150,14 +157,24 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     }
 
-    /*IEnumerator NameChangerCoroutine()
+    public void MatchManagerFinderHelper()
     {
-        yield return new WaitForSeconds(25f);
-        Debug.Log("Calling RPC aagain");
+        StartCoroutine(MatchManagerFinder());
+    }
 
-        SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
+    public IEnumerator MatchManagerFinder()
+    {
+        yield return new WaitForSeconds(5f);
+        Debug.Log("Finding matchmanager");
 
-    }*/
+        matchManagerInstance = FindObjectOfType<MatchManager>();
+        /*if (matchManagerInstance != null) Debug.Log("matchmanger found");
+        else Debug.Log("matchmanager not found");*/
+        matchManagerInstance.MatchTime = 0;
+
+        //SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
+
+    }
 
     public NetworkInputData GetNetworkInput()
     {
@@ -213,8 +230,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public override void FixedUpdateNetwork()
     {
+        /*if (Object.HasInputAuthority)
+        {
+            Debug.Log("Match Time->" + matchManagerInstance.MatchTime);
+        }*/
         if (Object.HasStateAuthority)
         {
+            
             //isGrounded = GroundCheck();
 
 
@@ -337,8 +359,18 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             isGrounded = GroundCheck();
             mouseInputScript.adsReal(input.isAiming);
+            //Debug.Log("Match Time->" + matchManagerInstance.MatchTime);
+            matchTimerText.text = Mathf.Ceil(matchManagerInstance.MatchTime).ToString();
 
-            
+            if (matchManagerInstance.MatchTime > 150f && matchManagerInstance.MatchTime < 160f && !quip1Called)
+            {
+                quip1Called = true;
+            }
+            else if(matchManagerInstance.MatchTime > 250f && !quip2Called)
+            {
+                quip2Called = true;
+            }
+
             // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
     }
