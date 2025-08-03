@@ -14,6 +14,6 @@ public class RoomConfirmer : MonoBehaviour
         bool nameFilled = !string.IsNullOrWhiteSpace(NameField.text);
         bool roomFilled = !string.IsNullOrWhiteSpace(RoomField.text);
 
-        ConfirmButton.SetActive(nameFilled && roomFilled);
+        ConfirmButton.SetActive(nameFilled || roomFilled);
     }
 }
