@@ -6,7 +6,7 @@ public class PlayerRayCastScript : MonoBehaviour
 {
 
     [Header("Raycast Settings")]
-    public float radius = 9f;
+    public float radius = 12f;
     public int pointCount = 6;
     public float raycastHeight = 6f;
     public LayerMask groundLayer;

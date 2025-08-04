@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 6944633610634495998}
   - component: {fileID: 5951334286587238909}
   - component: {fileID: 1845919134407440147}
-  m_Layer: 0
-  m_Name: Projectile 1
+  m_Layer: 9
+  m_Name: Projectile 3
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 3203103089
+  SortKey: 639563270
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []

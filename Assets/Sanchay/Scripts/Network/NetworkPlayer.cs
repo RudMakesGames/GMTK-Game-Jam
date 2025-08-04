@@ -158,6 +158,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 Debug.Log("player has selected single player mode");
                 gameObject.AddComponent<PlayerRayCastScript>();
                 isSinglePlayer=true;
+                GameObject.Find("EnemySpawn").AddComponent<EnemySpawnner>().EnemyPrefab = enemyPrefab;
+                
             }
         }
         else
@@ -424,10 +426,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             {
                 matchEnded = true;
                 LeanTween.move(GameObject.Find("QUIPS4").GetComponent<RectTransform>(), new Vector2(0, 0), 1f).setEaseOutQuad();
+                Invoke("changeToFinalScene", 5f);
             }
 
             // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
+    }
+
+    void changeToFinalScene()
+    {
+        Runner.LoadScene("FinalResults");
     }
 
     public void respawnQuip()
@@ -457,6 +465,18 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!Object.HasInputAuthority) return;
+        if (!isSinglePlayer) return;
+
+        if(collision.gameObject.CompareTag("Bullet"))
+        {
+            anim.SetTrigger("isHit");
+            isHit = true;
+            Vector3 bulletVelDirn = /*collision.gameObject.GetComponent<ProjectileRicochet>().projectileVelocity.normalized*/collision.gameObject.GetComponent<Rigidbody>().velocity.normalized;
+            bulletVelDirn.y = 0;
+            Debug.Log("addoing force locally->" + bulletVelDirn * knockBackStrength);
+            rb.AddForce(bulletVelDirn * knockBackStrength);
+        }
         /*if(collision.gameObject.CompareTag("Bullet") && Object.HasInputAuthority)
         {
             anim.SetTrigger("isHit");

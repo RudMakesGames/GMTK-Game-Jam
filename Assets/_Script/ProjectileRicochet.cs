@@ -29,7 +29,7 @@ public class ProjectileRicochet : NetworkBehaviour
     {
         if (!hasCollided)
         {
-            if(collision.gameObject.CompareTag("Player"))
+            if(collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
             {
                 Debug.Log("collison detected");
                 if(collision.gameObject.TryGetComponent<NetworkHitHandler>(out var hitHandler))
@@ -45,10 +45,18 @@ public class ProjectileRicochet : NetworkBehaviour
 
     void DestroyLifetime()
     {
-        if (!hasCollided)
+        if(CharacterSelector.selectedMode==1)
         {
-            Runner.Despawn(Object);
+            if (!hasCollided)
+            {
+                Runner.Despawn(Object);
+            }
         }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
     }
 
     public override void FixedUpdateNetwork()

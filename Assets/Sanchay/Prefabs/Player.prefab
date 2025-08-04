@@ -934,7 +934,7 @@ MonoBehaviour:
   isFiring: 0
   isHit: 0
   shouldTp: 0
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 4533843056667973070, guid: becf58737fb67ea4caba9fbea373149d, type: 3}
   TeleportPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2742987548182514348
 MonoBehaviour:
@@ -1730,7 +1730,7 @@ PrefabInstance:
     - target: {fileID: -6536401690549236835, guid: 8bacf51319b26d04e817504396299ba4, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: fc22d4eba55f443409e377aaf780c636, type: 2}
+      objectReference: {fileID: 2100000, guid: c85f1976101560940a9fc2f4b0d8930a, type: 2}
     - target: {fileID: 919132149155446097, guid: 8bacf51319b26d04e817504396299ba4, type: 3}
       propertyPath: m_Name
       value: railgun
