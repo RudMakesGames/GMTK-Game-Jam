@@ -21,6 +21,9 @@ public class Respawner : NetworkBehaviour
     TextMeshProUGUI timeLeftText;
 
     NetworkPlayer player;
+    NetworkHitHandler hitHandler;
+
+    bool killCountUpdating = false;
 
 
     void Start()
@@ -60,6 +63,7 @@ public class Respawner : NetworkBehaviour
             timeLeftSlider.gameObject.SetActive(false);
             timeLeftText = GameObject.Find("RespawnTimer").GetComponent<TextMeshProUGUI>();
             timeLeftText.gameObject.SetActive(false);
+            hitHandler = GetComponent<NetworkHitHandler>();
         }   
     }
 
@@ -89,9 +93,12 @@ public class Respawner : NetworkBehaviour
             Debug.LogWarning("No SpawnPoint set!");
         }
 
-        timeLeftSlider.gameObject.SetActive(false);
-        timeLeftText.gameObject.SetActive(false);
-
+        if(Object.HasInputAuthority)
+        {
+            timeLeftSlider.gameObject.SetActive(false);
+            timeLeftText.gameObject.SetActive(false);
+        }
+        
         ResetState2(false);
     }
 
@@ -110,8 +117,11 @@ public class Respawner : NetworkBehaviour
             Debug.LogWarning("TP Point is null!");
         }
 
-        timeLeftSlider.gameObject.SetActive(true);
-        timeLeftText.gameObject.SetActive(true);
+        if (Object.HasInputAuthority)
+        {
+            timeLeftSlider.gameObject.SetActive(true);
+            timeLeftText.gameObject.SetActive(true);
+        }
 
         ResetState2(true);
     }
@@ -155,10 +165,43 @@ public class Respawner : NetworkBehaviour
     {
         if (other.CompareTag("Bounds") && !timerActive)
         {
-            timeLeftSlider.gameObject.SetActive(true);
+            if (Object.HasInputAuthority)
+            {
+                timeLeftSlider.gameObject.SetActive(true);
+                timeLeftText.gameObject.SetActive(true);
+
+                Debug.Log("Entered Bounds – starting timer.");
+                timerActive = true;
+                timer = respawnTimeLimit;
+
+                if (!killCountUpdating)
+                {
+                    killCountUpdating = true;
+                    StartCoroutine(updateKillCount());
+                }
+            }
+            /*timeLeftSlider.gameObject.SetActive(true);
             Debug.Log("Entered Bounds – starting timer.");
             timerActive = true;
             timer = respawnTimeLimit;
+
+            if(!killCountUpdating)
+            {
+                killCountUpdating = true;
+                StartCoroutine(updateKillCount());
+            }*/
         }
+    }
+
+    IEnumerator updateKillCount()
+    {
+        if(hitHandler.lastHitPlayer==null) yield return null;
+        else
+        {
+            Debug.Log("Enterning coroutine for kill update");
+            hitHandler.lastHitPlayer.updateKillForPlayerRpc();
+            yield return new WaitForSeconds(0.8f);
+        }
+        killCountUpdating=false;
     }
 }

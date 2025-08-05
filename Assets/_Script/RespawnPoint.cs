@@ -15,6 +15,7 @@ public class RespawnPoint : MonoBehaviour
         if (collision.gameObject.GetComponent<Respawner>() != null)
         {
             collision.gameObject.GetComponent<Respawner>().AddRespawnPoint();
+            collision.gameObject.GetComponent<NetworkPlayer>().playerAudio.PlayOneShot(collision.gameObject.GetComponent<NetworkPlayer>().sounds[6]);
             spawner?.OnCollectiblePickedUp();
             Destroy(gameObject);
         }

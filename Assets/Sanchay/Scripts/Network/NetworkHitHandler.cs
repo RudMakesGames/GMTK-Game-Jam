@@ -26,18 +26,28 @@ public class NetworkHitHandler : NetworkBehaviour
     }
 
     [Networked, OnChangedRender(nameof(HealthChanged))]
-   
     public float NetworkedHealth { get; set; } = 100;
 
     void HealthChanged()
     {
         Debug.Log($"Health changed to: {NetworkedHealth}");
+
+        if(lastHitPlayer!= null )   
+        Debug.Log(lastHitPlayer.name);
+        else
+        {
+            Debug.Log("wasnt shot by anyone");
+        }
     }
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void DealDamageRpc(Vector3 projectileVelocity)
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void DealDamageRpc(Vector3 projectileVelocity, NetworkPlayer whoShot)
     {
         player.isHit = true;
+        lastHitPlayer = whoShot;
+        //player.hitEffect.Play();
+        player.playerAudio.PlayOneShot(player.sounds[4]);
+        Debug.Log("was shot by "+whoShot);
         rb.AddForce(projectileVelocity.normalized * knockBackStrength);
         // The code inside here will run on the client which owns this object (has state and input authority).
         Debug.Log("Received knockback on StateAuthority, Adding force to this object" + projectileVelocity.normalized*knockBackStrength);
@@ -45,12 +55,16 @@ public class NetworkHitHandler : NetworkBehaviour
         //anim.SetTrigger("isHit");
         networkAnim.SetTrigger("isHit");
         Invoke("resetHitBool", 0.5f);
+
     }
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void GetSwattedRPC(Vector3 hitPoint)
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void GetSwattedRPC(Vector3 hitPoint, NetworkPlayer whoHit)
     {
         player.isHit = true;
+        lastHitPlayer = whoHit;
+        //player.hitEffect.Play();
+        player.playerAudio.PlayOneShot(player.sounds[5]);
         //Vector3 forceDirn = Vector3.Dot((hitPoint - player.transform.position).normalized, transform.right)>0 ? -transform.right : transform.right;
         Vector3 forceDirn = (player.transform.position-hitPoint).normalized;
         forceDirn.y = 0;

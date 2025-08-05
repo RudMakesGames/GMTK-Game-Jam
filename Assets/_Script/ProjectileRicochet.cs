@@ -27,15 +27,15 @@ public class ProjectileRicochet : NetworkBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (!hasCollided)
+        //if (!hasCollided)
         {
             if(collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
             {
                 Debug.Log("collison detected");
                 if(collision.gameObject.TryGetComponent<NetworkHitHandler>(out var hitHandler))
                 {
-                    hitHandler.DealDamageRpc(projectileVelocity);
-                    Debug.Log("RPC call sent out");
+                    hitHandler.DealDamageRpc(projectileVelocity, transform.parent.GetComponent<NetworkPlayer>());
+                    Debug.Log("RPC call sent out with hit player as" + transform.parent.name);
                 }
             }
             hasCollided = true;

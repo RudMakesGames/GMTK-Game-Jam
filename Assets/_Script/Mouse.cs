@@ -203,6 +203,7 @@ public class Mouse : NetworkBehaviour
             //NetworkObject spawnedProjectile = Runner.Spawn(Projectile, firePoint.position, projectileRotation);
 
             spawnedProjectile = Runner.Spawn(currentProjectile, firePoint.position, projectileRotation, Object.InputAuthority);
+            spawnedProjectile.gameObject.transform.parent = transform;
             ProjectileRicochet ricochet = spawnedProjectile.GetComponent<ProjectileRicochet>();
             Rigidbody rb = spawnedProjectile.GetComponent<Rigidbody>();
             if (rb != null)
@@ -226,6 +227,7 @@ public class Mouse : NetworkBehaviour
         }*/
 
         yield return new WaitForSeconds(fireCooldown);
+        //player.muzzleFlash.Stop();
         canFire = true;
     }
 }

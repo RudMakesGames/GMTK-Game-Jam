@@ -46,6 +46,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _MatchTime: 0
+  _BallonYRotPrime: 0
+  BalloonRotSpeed: 5
+  WinnerList: []
+  MaterialList: []
+  NameList: []
+  materials:
+  - {fileID: 2100000, guid: fc22d4eba55f443409e377aaf780c636, type: 2}
+  - {fileID: 2100000, guid: d1938fa41106d4a489635a21679a1057, type: 2}
+  - {fileID: 2100000, guid: c85f1976101560940a9fc2f4b0d8930a, type: 2}
 --- !u!114 &3575942430111020862
 MonoBehaviour:
   m_ObjectHideFlags: 0

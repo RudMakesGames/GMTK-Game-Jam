@@ -6,6 +6,7 @@ using Cinemachine;
 using Fusion.Addons.Physics;
 using UnityEngine.InputSystem;
 using TMPro;
+//using UnityEditor.Experimental.GraphView;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
@@ -20,6 +21,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     [Networked, OnChangedRender(nameof(OnProjectileChanged))]
     public NetworkBool loopMode { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnKill))]
+    public int kills { get; set; }
+
 
 
     //[Networked] int nickMat {  get; set; } 
@@ -49,10 +54,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     //[SerializeField] int currentWeaponIndex;
     [SerializeField] CinemachineBrain cineBrain;
     [SerializeField] TextMeshProUGUI matchTimerText;
+    [SerializeField] GameObject primeCyclinder;
+    public AudioSource playerAudio;
+    //public ParticleSystem hitEffect;
 
     [Header("References Manual")]
     public LayerMask groundLayer;
     [SerializeField] float maxSpeed, knockBackStrength;
+    public List<AudioClip> sounds;
 
     [Header("Parachute Settings")]
     public GameObject parachuteVisual;
@@ -102,7 +111,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         if (Object.HasInputAuthority)
         {
             Local = this;
+            playerAudio = GetComponentInChildren<AudioSource>();
+            playerAudio.PlayOneShot(sounds[3]);
             Debug.Log("You have spawned");
+
+            kills = 0;
 
             transform.name = $"P_{Object.Id}";
 
@@ -161,10 +174,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 GameObject.Find("EnemySpawn").AddComponent<EnemySpawnner>().EnemyPrefab = enemyPrefab;
                 
             }
+
+            primeCyclinder = GameObject.Find("CenterCyclinder");
+            //muzzleFlash = transform.Find("Follow Target").Find("railgun").Find("vfx_MuzzleFlash_01").GetComponent<ParticleSystem>();
+            //hitEffect = transform.Find("Effects").transform.Find("Hit_02").GetComponent<ParticleSystem>();
         }
         else
         {
             transform.name = $"P_{Object.Id}";
+            MatchManagerFinderHelper();
             NetworkPlayer[] allPlayers = FindObjectsOfType<NetworkPlayer>();
 
             foreach (NetworkPlayer player in allPlayers)
@@ -173,11 +191,26 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
             //this.SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
             //SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
+
+            Invoke("registerPlayer", 8f);
         }
+
 
         /*transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
         transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;*/
 
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void updateKillForPlayerRpc()
+    {
+        kills++;
+    }
+
+    public void OnKill()
+    {
+        Debug.Log("Player registered a kill updating");
+        matchManagerInstance.GetPlayerKillCountRpc(this, kills);
     }
 
     public void MatchManagerFinderHelper()
@@ -185,18 +218,36 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         StartCoroutine(MatchManagerFinder());
     }
 
+    void registerPlayer()
+    {
+        if (matchManagerInstance != null) 
+        matchManagerInstance.UpdatePlayerListRpc(this);
+    }
+
     public IEnumerator MatchManagerFinder()
     {
+        
         yield return new WaitForSeconds(5f);
         Debug.Log("Finding matchmanager");
 
+
+        if(matchManagerInstance==null)
         matchManagerInstance = FindObjectOfType<MatchManager>();
+        else
+        {
+            Debug.Log("this player already has an instance assigned");
+        }
         /*if (matchManagerInstance != null) Debug.Log("matchmanger found");
         else Debug.Log("matchmanager not found");*/
+
+        /*if (Runner.IsSharedModeMasterClient)
+        {
+            matchManagerInstance.materials = materials;
+        }*/
+
         matchManagerInstance.MatchTime = 0;
 
         //SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
-
     }
 
     public NetworkInputData GetNetworkInput()
@@ -269,6 +320,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             cineBrain.ManualUpdate();
             cineCamMain.UpdateCameraState(Vector3.up, Runner.LocalAlpha);
+
+            primeCyclinder.transform.rotation = Quaternion.Euler(0, matchManagerInstance.BallonYRotPrime, 0);
         }
     }
 
@@ -372,6 +425,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             if (input.isJumping)
             {
                 rb.AddForce(Vector3.up * 15f, ForceMode.Impulse);
+                playerAudio.PlayOneShot(sounds[0]);
+
                 //isJumping = false;
             }
 
@@ -379,11 +434,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             {
                 if(currentWeapon!=2)
                 {
+                    playerAudio.PlayOneShot(sounds[1]);
+                    //muzzleFlash.Play();
                     mouseInputScript.FireReal();
                 }
 
                 else if(currentWeapon==2)
                 {
+                    playerAudio.PlayOneShot(sounds[2]);
                     networkAnim.SetTrigger("spatulaAttack");
                 }
                     //spatulaAttackCode
@@ -428,6 +486,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 LeanTween.move(GameObject.Find("QUIPS4").GetComponent<RectTransform>(), new Vector2(0, 0), 1f).setEaseOutQuad();
                 Invoke("changeToFinalScene", 5f);
             }
+
 
             // referencesCheckText.text = $"{mouseInputScript.rotationY} / {mouseInputScript.rotationX}\nGrounded: {isGrounded}\nParachuting: {isParachuting}";
         }
@@ -595,5 +654,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         //transform.GetComponentInChildren<TextMeshProUGUI>().text = nickName.ToString();
 
         transform.Find("PlayerMesh").GetComponent<Renderer>().material = materials[materialIndex];
+
+        /*if(Runner.IsSharedModeMasterClient)
+        {
+            matchManagerInstance.MatchTime = 0;
+        }*/
     }
 }

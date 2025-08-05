@@ -17,6 +17,7 @@ public class CollectibleSpawner : MonoBehaviour
 
     private void SpawnCollectible()
     {
+        //if(this.transform.parent)
         currentRespawnPoint = Instantiate(RespawnPoint,transform.position, Quaternion.identity);
 
         currentRespawnPoint.transform.SetParent(transform);

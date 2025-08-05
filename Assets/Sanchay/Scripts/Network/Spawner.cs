@@ -119,12 +119,12 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsSharedModeMasterClient)
         {
-            Debug.Log("I am now the new Shared Mode Master Client");
             var matchManagerNewInstance = FindObjectOfType<MatchManager>();
 
             if (matchManagerNewInstance != null && matchManagerNewInstance.HasInputAuthority == false)
             {
                 matchManagerInstance.GetComponent<NetworkObject>().AssignInputAuthority(runner.LocalPlayer);
+                Debug.Log("I am now the new Shared Mode Master Client");
             }
         }
     }
