@@ -56,7 +56,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] TextMeshProUGUI matchTimerText;
     [SerializeField] GameObject primeCyclinder;
     public AudioSource playerAudio;
-    //public ParticleSystem hitEffect;
+    public ParticleSystem hitEffect, muzzleFlash;
 
     [Header("References Manual")]
     public LayerMask groundLayer;
@@ -83,7 +83,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     #region Input
     Vector2 moveInputVector = Vector2.zero;
     bool isJumping = false;
-    bool isGrounded = false;
+    public bool isGrounded = false;
     Mouse mouseInputScript;
     float smoothVel;
     float camRotTemp;
@@ -176,8 +176,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
 
             primeCyclinder = GameObject.Find("CenterCyclinder");
-            //muzzleFlash = transform.Find("Follow Target").Find("railgun").Find("vfx_MuzzleFlash_01").GetComponent<ParticleSystem>();
-            //hitEffect = transform.Find("Effects").transform.Find("Hit_02").GetComponent<ParticleSystem>();
+            muzzleFlash = transform.Find("Follow Target").Find("railgun").Find("vfx_MuzzleFlash_01").GetComponent<ParticleSystem>();
+            hitEffect = transform.Find("Effects").transform.Find("Hit_02").GetComponent<ParticleSystem>();
+
+            //this.ParachuteVisualsRPC();
         }
         else
         {
@@ -188,13 +190,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             foreach (NetworkPlayer player in allPlayers)
             {
                 player.SetNameRPC(player.nicknameTemp, player.materianIndexTemp);
+                //player.ParachuteVisualsRPC();
             }
             //this.SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
             //SetNameRPC(PlayerPrefs.GetString("PlayerNickName"));
 
             Invoke("registerPlayer", 8f);
         }
-
+        
 
         /*transform.Find("PlayerMesh").GetComponent<Renderer>().material = CharacterSelector.selectedMat;
         transform.GetComponentInChildren<TextMeshProUGUI>().text = CharacterSelector.selectedName;*/
@@ -325,6 +328,18 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         }
     }
 
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void ParachuteVisualsRPC(bool active)
+    {
+        if (Object.HasInputAuthority)
+        {
+            if(!active)
+                parachuteVisual.SetActive(false);
+            else
+                parachuteVisual.SetActive(true);
+        }
+    }
+
     public override void FixedUpdateNetwork()
     {
         /*if (Object.HasInputAuthority)
@@ -435,7 +450,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 if(currentWeapon!=2)
                 {
                     playerAudio.PlayOneShot(sounds[1]);
-                    //muzzleFlash.Play();
+                    muzzleFlash.Play();
                     mouseInputScript.FireReal();
                 }
 
@@ -480,9 +495,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 currentWeapon = 2;
             }
 
-            if(matchManagerInstance.MatchTime>350f && !matchEnded)
+            if(matchManagerInstance.MatchTime>350f && !matchEnded) //350 set krna hai isko
             {
                 matchEnded = true;
+                GameObject.Find("QUIPS2").SetActive(false);
                 LeanTween.move(GameObject.Find("QUIPS4").GetComponent<RectTransform>(), new Vector2(0, 0), 1f).setEaseOutQuad();
                 Invoke("changeToFinalScene", 5f);
             }
@@ -619,6 +635,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 loopMode = false;
                 //LeanTween.move(GameObject.Find("QUIPS2"), new Vector2(0, 0), 0.5f).setLoopPingPong(1);
                 Vector2 ogPos2 = GameObject.Find("QUIPS2").GetComponent<RectTransform>().position;
+                GameObject.Find("QUIPS1").gameObject.SetActive(false);
                 LeanTween.move(GameObject.Find("QUIPS2").GetComponent<RectTransform>(), new Vector2(0, 0), 1f).setEaseOutQuad().setOnComplete(() =>
                 {
                     LeanTween.delayedCall(GameObject.Find("QUIPS2").gameObject, 3.5f, () =>
@@ -654,6 +671,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         //transform.GetComponentInChildren<TextMeshProUGUI>().text = nickName.ToString();
 
         transform.Find("PlayerMesh").GetComponent<Renderer>().material = materials[materialIndex];
+
+        parachuteVisual.SetActive(false);
 
         /*if(Runner.IsSharedModeMasterClient)
         {

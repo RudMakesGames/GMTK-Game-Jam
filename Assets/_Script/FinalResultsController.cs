@@ -9,13 +9,21 @@ public class FinalResultsController : MonoBehaviour
     public AudioClip Honk1, Honk2, Tada, Firework;
     public GameObject Button,Rockets;
 
-    MatchManager matchManager;
+    public MatchManager matchManager;
 
     public GameObject thirdWinner, secondWinner, Winner;
+
+    public List<Material> materials;
+
+    public List<Light> lights;
 
 
     private void Start()
     {
+        foreach(Light light in lights)
+        {
+            light.gameObject.SetActive(false);
+        }
         matchManager = FindObjectOfType<MatchManager>();
         GetWinners();
     }
@@ -45,29 +53,30 @@ public class FinalResultsController : MonoBehaviour
 
         if(matchManager.WinnerList.Count >= 3)
         {
-            thirdWinner.GetComponent<Renderer>().material = matchManager.MaterialList[2];
-            thirdWinner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.NameList[2];
+            thirdWinner.GetComponent<Renderer>().material = materials[matchManager.thirdPlaceMatIndex];
+            thirdWinner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.thirdPlace;
 
-            secondWinner.GetComponent<Renderer>().material = matchManager.MaterialList[1];
-            secondWinner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.NameList[1];
+            secondWinner.GetComponent<Renderer>().material = materials[matchManager.secondPlaceMatIndex];
+            secondWinner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.secondPlace;
 
-            Winner.GetComponent<Renderer>().material = matchManager.MaterialList[0];
-            Winner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.NameList[0];
+            Winner.GetComponent<Renderer>().material = materials[matchManager.WinnerMatIndex];
+            Winner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.Winner;
+
         }
 
         else if(matchManager.WinnerList.Count >= 2)
         {
-            secondWinner.GetComponent<Renderer>().material = matchManager.MaterialList[1];
-            secondWinner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.NameList[1];
+            secondWinner.GetComponent<Renderer>().material = materials[matchManager.secondPlaceMatIndex];
+            secondWinner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.secondPlace;
 
-            Winner.GetComponent<Renderer>().material = matchManager.MaterialList[0];
-            Winner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.NameList[0];
+            Winner.GetComponent<Renderer>().material = materials[matchManager.WinnerMatIndex];
+            Winner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.Winner;
         }
-        
+
         else
         {
-            Winner.GetComponent<Renderer>().material = matchManager.MaterialList[0];
-            Winner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.NameList[0];
+            Winner.GetComponent<Renderer>().material = materials[matchManager.WinnerMatIndex];
+            Winner.GetComponentInChildren<TextMeshProUGUI>().text = matchManager.Winner;
         }
 
     }
@@ -80,6 +89,7 @@ public class FinalResultsController : MonoBehaviour
         {
             AudioManager.instance.PlaySoundFXClip(Honk1, transform, 1, 1);
             AudioManager.instance.PlaySoundFXClip(Tada, transform, 0.5f, Random.Range(0.9f, 1.1f));
+            lights[0].gameObject.SetActive(true);
         }
 
     }
@@ -93,12 +103,14 @@ public class FinalResultsController : MonoBehaviour
         {
             AudioManager.instance.PlaySoundFXClip(Honk2, transform, 1, 1);
             AudioManager.instance.PlaySoundFXClip(Tada, transform, 0.5f, Random.Range(0.9f, 1.1f));
+            lights[1].gameObject.SetActive(true);
         }
     }
 
     public void FirstPlace()
     {
         AudioManager.instance.PlaySoundFXClip(Tada, transform, 0.5f, Random.Range(0.9f,1.1f));
+        lights[2].gameObject.SetActive(true);
     }
     public void PlayFireCrackers()
     {

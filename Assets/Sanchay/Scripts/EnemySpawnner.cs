@@ -12,9 +12,12 @@ public class EnemySpawnner : MonoBehaviour
 
     public bool spawnStopped = false;
 
+    public NetworkPlayer player;
+
     private void Start()
     {
         InvokeRepeating("SpawnEnemy", 5f, 15f);
+        player = FindObjectOfType<NetworkPlayer>();
         //EnemyPrefab = FindObjectOfType<NetworkPlayer>().enemyPrefab;
     }
 
@@ -38,7 +41,7 @@ public class EnemySpawnner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        if (spawnStopped || EnemyPrefab==null) return;
+        if (spawnStopped || EnemyPrefab==null || !player.isGrounded) return;
 
 
         GameObject.Instantiate(EnemyPrefab, transform.position, Quaternion.identity);

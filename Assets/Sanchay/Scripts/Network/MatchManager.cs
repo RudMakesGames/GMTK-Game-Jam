@@ -11,10 +11,32 @@ public class MatchManager : NetworkBehaviour
     [Networked]
     public float MatchTime { get; set; }
 
-    [Networked]
+    [Networked]                 
     public float BallonYRotPrime { get; set; }
 
-    [SerializeField] float BalloonRotSpeed = 5f;
+    [Networked]
+    public string thirdPlace {  get; set; }
+
+    [Networked]
+    public string secondPlace { get; set; }
+
+    [Networked]
+    public string Winner { get; set; }
+
+    [Networked]
+    public int thirdPlaceMatIndex { get; set; }
+
+    [Networked]
+    public int secondPlaceMatIndex { get; set; }
+
+    [Networked]
+    public int WinnerMatIndex { get; set; }
+
+
+
+
+
+    [SerializeField] float BalloonRotSpeed = 0.5f;
 
     GameObject primeBalloon;
 
@@ -78,7 +100,7 @@ public class MatchManager : NetworkBehaviour
             MatchTime += Runner.DeltaTime;
             //Mathf.CeilToInt(MatchTime);
 
-            if (MatchTime > 348f && !fetchResults)
+            if (MatchTime > 347f && !fetchResults) //348 tha iska
             {
                 fetchResults = true;
                 getWinners();
@@ -95,7 +117,14 @@ public class MatchManager : NetworkBehaviour
                                 .Select(entry => entry.Key)
                                     .ToList();
 
-        SetWinner();
+        Invoke("GettingWinnerListDelayed", 2f);
+
+    }
+
+
+    void GettingWinnerListDelayed()
+    {
+        this.SetWinnerRPC();
     }
 
     /*[Rpc(RpcSources.All, RpcTargets.All)]
@@ -103,8 +132,13 @@ public class MatchManager : NetworkBehaviour
     {
         //stuff
     }*/
-    public void SetWinner()
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void SetWinnerRPC()
     {
+        //if (!Object.HasInputAuthority) return;
+
+
         Debug.Log("setting winner values");
         /*if (rank == 1)
         {
@@ -146,14 +180,40 @@ public class MatchManager : NetworkBehaviour
         return null;*/
 
 
-        MaterialList.Clear();
-        NameList.Clear();
+        /*MaterialList.Clear();
+        NameList.Clear();*/
+
+        Debug.Log(WinnerList.Count);
 
         for (int i = 0; i < WinnerList.Count; i++)
         {
+            Debug.Log("going for the" + i + " value");
             MaterialList.Add(materials[WinnerList[i].materialIndex]);
             NameList.Add(WinnerList[i].nickName.ToString());
         }
+
+        if (WinnerList.Count >= 3)
+        {
+            thirdPlace = NameList[2]; secondPlace = NameList[1]; Winner = NameList[0];
+            thirdPlaceMatIndex = WinnerList[2].materialIndex; secondPlaceMatIndex = WinnerList[1].materialIndex; WinnerMatIndex = WinnerList[0].materialIndex;
+        }
+        else if(WinnerList.Count >= 2)
+        {
+            secondPlace = NameList[1]; Winner = NameList[0];
+            secondPlaceMatIndex = WinnerList[1].materialIndex; WinnerMatIndex = WinnerList[0].materialIndex;
+        }
+        else
+        {
+            Winner = NameList[0];
+            WinnerMatIndex = WinnerList[0].materialIndex;
+        }
+        
+        
+
+        Debug.Log("thirdPlace-> "+thirdPlace+" and mat->" +thirdPlaceMatIndex);
+        Debug.Log("secondPlace-> " + secondPlace + " and mat->" + secondPlaceMatIndex);
+        Debug.Log("Winner-> " + Winner + " and mat->" + WinnerMatIndex);
+
     }
 
 

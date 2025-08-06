@@ -322,6 +322,9 @@ MonoBehaviour:
   nextMovePoint: {x: 0, y: 0, z: 0}
   projectilePrefab: {fileID: 4994892167078154172, guid: 4b242ce120d459149bee22b2d319a1c6, type: 3}
   projectileSpeed: 50
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!195 &3132849978881255824
 NavMeshAgent:
   m_ObjectHideFlags: 0

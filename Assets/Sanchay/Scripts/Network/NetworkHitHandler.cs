@@ -43,9 +43,12 @@ public class NetworkHitHandler : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void DealDamageRpc(Vector3 projectileVelocity, NetworkPlayer whoShot)
     {
+        if(whoShot!=null)
+            lastHitPlayer = whoShot;
+
+
         player.isHit = true;
-        lastHitPlayer = whoShot;
-        //player.hitEffect.Play();
+        player.hitEffect.Play();
         player.playerAudio.PlayOneShot(player.sounds[4]);
         Debug.Log("was shot by "+whoShot);
         rb.AddForce(projectileVelocity.normalized * knockBackStrength);
@@ -61,9 +64,12 @@ public class NetworkHitHandler : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void GetSwattedRPC(Vector3 hitPoint, NetworkPlayer whoHit)
     {
+        if (whoHit != null)
+            lastHitPlayer = whoHit;
+
         player.isHit = true;
         lastHitPlayer = whoHit;
-        //player.hitEffect.Play();
+        player.hitEffect.Play();
         player.playerAudio.PlayOneShot(player.sounds[5]);
         //Vector3 forceDirn = Vector3.Dot((hitPoint - player.transform.position).normalized, transform.right)>0 ? -transform.right : transform.right;
         Vector3 forceDirn = (player.transform.position-hitPoint).normalized;

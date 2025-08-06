@@ -22,6 +22,8 @@ public class EnemyAi : MonoBehaviour
 
     bool isNotMoving = true;
 
+    public LayerMask groundLayer;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -34,6 +36,7 @@ public class EnemyAi : MonoBehaviour
         playerRayCastScript = player.GetComponent<PlayerRayCastScript>();
 
         InvokeRepeating("shootAtPlayer", 6f, 2f);
+        InvokeRepeating("GroundCheck", 6f, 0.3f);
         Invoke("getReferences", 1f);
         //projectileSpawnPoint = transform.Find("Follow Target").Find("railgun").Find("FirePoint").transform.position;
     }
@@ -64,11 +67,19 @@ public class EnemyAi : MonoBehaviour
 
         }
 
+        if(!GroundCheck()) agent.enabled = false;
+
         if(transform.position.y<-10f)
         {
             EnemySpawnner.EnemyCount--;
             Destroy(gameObject);
         }
+    }
+
+    bool GroundCheck()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, 5f, groundLayer)) return true;
+        return false;
     }
 
     void getReferences()

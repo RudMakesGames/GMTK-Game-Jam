@@ -11,6 +11,8 @@ public class PlayerRayCastScript : MonoBehaviour
     public float raycastHeight = 6f;
     public LayerMask groundLayer;
 
+    public bool playerGrounded;
+
     [Header("Output")]
     public List<Vector3> validGroundPoints = new List<Vector3>();
     public bool drawDebug = true;

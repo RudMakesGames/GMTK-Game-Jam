@@ -13,6 +13,8 @@ public class ProjectileRicochet : NetworkBehaviour
 
     public Vector3 projectileVelocity;
 
+    public NetworkPlayer player;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -34,8 +36,18 @@ public class ProjectileRicochet : NetworkBehaviour
                 Debug.Log("collison detected");
                 if(collision.gameObject.TryGetComponent<NetworkHitHandler>(out var hitHandler))
                 {
-                    hitHandler.DealDamageRpc(projectileVelocity, transform.parent.GetComponent<NetworkPlayer>());
-                    Debug.Log("RPC call sent out with hit player as" + transform.parent.name);
+                    //if(hitHandler!=null && transform.parent.GetComponent<NetworkPlayer>()!=null) 
+                    if(CharacterSelector.selectedMode!=1)
+                    {
+                        hitHandler.DealDamageRpc(projectileVelocity, null);
+                        Debug.Log("RPC call sent out with no hit player as single player mode");
+
+                    }
+                    else
+                    {
+                        hitHandler.DealDamageRpc(projectileVelocity, player);
+                        Debug.Log("RPC call sent out with hit player as" + player.name);
+                    }
                 }
             }
             hasCollided = true;
