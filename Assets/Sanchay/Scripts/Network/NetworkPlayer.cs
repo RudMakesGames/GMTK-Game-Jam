@@ -6,6 +6,7 @@ using Cinemachine;
 using Fusion.Addons.Physics;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.SceneManagement;
 //using UnityEditor.Experimental.GraphView;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
@@ -293,6 +294,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             {
                 parachuteRequested = true;
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                transform.Find("Canvas2").Find("Menu").gameObject.SetActive(true);
+            }
         }
 
         /*if (isSinglePlayer)
@@ -364,7 +372,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                         cineCamParachute.Priority = 2;
                         cineCamMain.Priority = 0;
                         cineCamAds.Priority = 0;
-                        rb.drag = 5;
+                        rb.drag = 3;
                     }
                    
                 }
@@ -472,6 +480,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 shouldTp = false;
                 Tp(TeleportPoint);
             }
+
+            
 
         }
 
@@ -645,6 +655,21 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 });
                 break;
         }
+    }
+
+    public void ExitMatch()
+    {
+        if(!Object.HasInputAuthority) return;
+
+        // Make sure the Runner exists
+        if (NetworkRunner.Instances.Count > 0)
+        {
+            var runner = NetworkRunner.Instances[0];
+            runner.Shutdown(); // Disconnects from the session
+        }
+
+        // Load main menu scene
+        SceneManager.LoadScene("Menu");
     }
 
 
