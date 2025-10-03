@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - EnemyBullet
   - Balloons
+  - Upper Platform
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - baloons
   - Enemy2
   - EnemyBullet
-  - 
+  - Player
   - 
   - 
   - 

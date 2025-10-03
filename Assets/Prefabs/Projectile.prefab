@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 5951334286587238909}
   - component: {fileID: 1845919134407440147}
   - component: {fileID: 6807535049962881187}
-  - component: {fileID: 5685244655479883952}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Bullet
@@ -162,7 +161,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.2
+    m_ImpulseDuration: 0.35
     m_ImpulseType: 0
     m_DissipationRate: 0.25
     m_RawSignal: {fileID: 0}
@@ -210,6 +209,7 @@ MonoBehaviour:
   SpawnedPoint: {fileID: 0}
   isBoomerang: 1
   projectileVelocity: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
 --- !u!114 &5951334286587238909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,17 +357,3 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &5685244655479883952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4994892167078154172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1541381998, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Guid:
-    RawGuidValue: 8419dc7c5bff6aa4ea295043c006a39a

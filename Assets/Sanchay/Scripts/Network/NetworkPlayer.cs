@@ -372,7 +372,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                         cineCamParachute.Priority = 2;
                         cineCamMain.Priority = 0;
                         cineCamAds.Priority = 0;
-                        rb.drag = 3;
+                        rb.drag = 1.1f;
                     }
                    
                 }
@@ -561,6 +561,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             bulletVelDirn.y = 0;
             Debug.Log("addoing force locally->" + bulletVelDirn * knockBackStrength);
             rb.AddForce(bulletVelDirn * knockBackStrength);
+        }
+
+        if(collision.gameObject.CompareTag("Upper Platform"))
+        {
+            Tp(TeleportPoint);
         }
         /*if(collision.gameObject.CompareTag("Bullet") && Object.HasInputAuthority)
         {

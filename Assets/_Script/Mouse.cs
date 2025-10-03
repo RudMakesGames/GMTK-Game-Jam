@@ -26,6 +26,7 @@ public class Mouse : NetworkBehaviour
     public float projectileSpeed = 20f;
     public float fireCooldown = 0.2f;
     private bool canFire = true;
+    public Vector3 recoilDirn;
 
     public float mouseX, mouseY;
 
@@ -212,8 +213,13 @@ public class Mouse : NetworkBehaviour
                 rb.velocity = firePoint.forward * projectileSpeed;
             }
 
+            Vector3 localRecoil = recoilDirn; //new 
+            Vector3 worldRecoil = Camera.main.transform.TransformDirection(localRecoil); //new
+
+
             CinemachineImpulseSource source = spawnedProjectile.GetComponent<CinemachineImpulseSource>();
-            source.GenerateImpulse(Camera.main.transform.forward);
+            //source.GenerateImpulse(Camera.main.transform.forward); //old
+            source.GenerateImpulse(worldRecoil); //new
 
 
             //if(Object.HasInputAuthority)
