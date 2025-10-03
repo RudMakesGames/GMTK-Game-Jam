@@ -160,7 +160,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.2
+    m_ImpulseDuration: 0.35
     m_ImpulseType: 0
     m_DissipationRate: 0.25
     m_RawSignal: {fileID: 0}
@@ -208,6 +208,7 @@ MonoBehaviour:
   SpawnedPoint: {fileID: 0}
   isBoomerang: 0
   projectileVelocity: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
 --- !u!114 &5951334286587238909
 MonoBehaviour:
   m_ObjectHideFlags: 0

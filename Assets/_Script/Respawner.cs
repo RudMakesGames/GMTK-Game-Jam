@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Respawner : NetworkBehaviour
 {
     public int RespawnPoints;
-    public int RequiredPoints = 4;
+    public int RequiredPoints = 2;
     public float respawnTimeLimit = 30f;
     public Transform SpawnPoint;
     public Transform TPpoint;

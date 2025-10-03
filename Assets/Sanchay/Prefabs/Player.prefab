@@ -16289,8 +16289,9 @@ MonoBehaviour:
   Boomerang: {fileID: 4994892167078154172, guid: 8419dc7c5bff6aa4ea295043c006a39a, type: 3}
   currentProjectile: {fileID: 0}
   firePoint: {fileID: 8243725054503983077}
-  projectileSpeed: 20
+  projectileSpeed: 50
   fireCooldown: 0.5
+  recoilDirn: {x: -0.5, y: 0, z: 0.8}
   mouseX: 0
   mouseY: 0
 --- !u!114 &3135762364870901323
@@ -16416,7 +16417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RespawnPoints: 0
-  RequiredPoints: 4
+  RequiredPoints: 2
   respawnTimeLimit: 30
   SpawnPoint: {fileID: 0}
   TPpoint: {fileID: 0}

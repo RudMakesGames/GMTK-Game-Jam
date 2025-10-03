@@ -6,7 +6,7 @@ using UnityEngine;
 public class CollectibleSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject RespawnPoint;
-    [SerializeField] private float respawnTime = 5f;
+    [SerializeField] private float respawnTime = 3f;
 
     private GameObject currentRespawnPoint;
 

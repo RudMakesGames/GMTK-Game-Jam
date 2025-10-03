@@ -36,7 +36,7 @@ public class MatchManager : NetworkBehaviour
 
 
 
-    [SerializeField] float BalloonRotSpeed = 0.02f;
+    [SerializeField] float BalloonRotSpeed = 0.0001f;
 
     GameObject primeBalloon;
 
